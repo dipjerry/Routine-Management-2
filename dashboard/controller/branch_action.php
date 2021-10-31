@@ -33,7 +33,7 @@ if (isset($_POST["action"])) {
         $data = array();
         foreach ($result as $row) {
             $sub_array = array();
-            $sub_array[] = $row["course"];
+            $sub_array[] = $object->get_course_name($row["course"]);
             $sub_array[] = $row["branch"];
             $sub_array[] = $row["branch_code"];
             $sub_array[] = $row["description"];
@@ -60,25 +60,25 @@ if (isset($_POST["action"])) {
         $error = '';
         $success = '';
         $data = array(
-            ':course'        =>    $_POST["course"],
-            ':courseCode'        =>    $_POST["courseCode"],
+            ':branchCode'        =>    $_POST["branchCode"],
         );
-        $object->query = "SELECT * FROM course WHERE course_name = :course AND course_code = :courseCode";
+        $object->query = "SELECT * FROM branch WHERE  branch_code = :branchCode";
         $object->execute($data);
         if ($object->row_count() > 0) {
             $error = '<div class="alert alert-danger">Course Already Exists</div>';
         } else {
             $data = array(
                 ':course'                  =>    $object->clean_input($_POST['course']),
-                ':courseCode'              =>    $object->clean_input($_POST['courseCode']),
+                ':branch'                  =>    $object->clean_input($_POST['branch']),
+                ':branchCode'              =>    $object->clean_input($_POST['branchCode']),
                 ':description'             =>    $object->clean_input($_POST['description'])
             );
             $object->query = "
-			INSERT INTO course (course_name, course_code ,description)
-			VALUES (:course, :courseCode, :description)
+			INSERT INTO branch (course,branch, branch_code ,description)
+			VALUES (:course,:branch, :branchCode, :description)
 			";
             $object->execute($data);
-            $success = '<div class="alert alert-success">Teacher Added</div>';
+            $success = '<div class="alert alert-success">Branch Added</div>';
         }
         $output = array(
             'error'        =>    $error,

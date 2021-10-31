@@ -24,9 +24,9 @@
                                         <label class="clear-top-margin"><i class="fa fa-book"></i>COURSE</label>
                                         <?php echo $object->get_course() ?>
                                         <label><i class="fa fa-book"></i>BRANCH</label>
-                                        <input type="text" name="course" placeholder="5 STD" />
+                                        <input type="text" name="branch" placeholder="5 STD" />
                                         <label><i class="fa fa-code"></i>BRANCH CODE</label>
-                                        <input type="text" name="courseCode" placeholder="PTH05" />
+                                        <input type="text" name="branchCode" placeholder="PTH05" />
                                         <label><i class="fa fa-info-circle"></i>DESCRIPTION</label>
                                         <textarea name="description" placeholder="Enter Description Here"></textarea>
                                         <div class="col-sm-12">
@@ -156,9 +156,9 @@
             }, ],
         });
 
-        $('#courseForm').on('submit', function(event) {
+        $('#branchForm').on('submit', function(event) {
             event.preventDefault();
-            if ($('#courseForm').parsley().isValid()) {
+            if ($('#branchForm').parsley().isValid()) {
                 $.ajax({
                     url: "./controller/branch_action.php",
                     method: "POST",

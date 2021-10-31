@@ -86,12 +86,15 @@ class routine
     }
     function get_course_name($id)
     {
+        // var_dump($id);
         $this->query = "
-		SELECT course_name FROM course where  course_code = " . $id . " LIMIT 1
+		SELECT course_name FROM course where  course_code = '" . $id . "' LIMIT 1
 		";
+        // var_dump($this->query);
+
         $result = $this->get_result();
         foreach ($result as $row) {
-            return $row;
+            return $row['course_name'];
         }
     }
 

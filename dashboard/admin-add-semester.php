@@ -9,7 +9,7 @@
 		<div class="container-fluid">
 			<div class="row">
 				<div class="col-lg-12 clear-padding-xs">
-					<h5 class="page-title"><i class="fa fa-cogs"></i>ALL SECTIONS</h5>
+					<h5 class="page-title"><i class="fa fa-cogs"></i>ALLOT CLASSROOM</h5>
 					<div class="section-divider"></div>
 				</div>
 			</div>
@@ -17,24 +17,33 @@
 				<div class="col-lg-12 clear-padding-xs">
 					<div class="col-sm-4">
 						<div class="dash-item first-dash-item">
-							<h6 class="item-title"><i class="fa fa-plus-circle"></i>ADD SECTION</h6>
+							<h6 class="item-title"><i class="fa fa-plus-circle"></i>ADD CLASSROOM</h6>
 							<div class="inner-item">
 								<div class="dash-form">
-									<label class="clear-top-margin"><i class="fa fa-book"></i>SECTION</label>
-									<input type="text" placeholder="A" />
-									<label><i class="fa fa-code"></i>SECTION CLASS</label>
-									<select>
-										<option>-- Select --</option>
-										<option>STD 5</option>
-										<option>STD 6</option>
-									</select>
-									<label><i class="fa fa-user-secret"></i>SECTION CODE</label>
-									<input type="text" placeholder="PTH05A" />
-									<label><i class="fa fa-info-circle"></i>DESCRIPTION</label>
-									<textarea placeholder="Enter Description Here"></textarea>
-									<div>
-										<a href="#"><i class="fa fa-paper-plane"></i> CREATE</a>
-									</div>
+									<form action="post" id="classRoomForm">
+										<label class="clear-top-margin"><i class="fa fa-book"></i>COURSE</label>
+										<?php echo $object->get_course() ?>
+
+										<label><i class="fa fa-book"></i>BRANCH</label>
+										<?php echo $object->get_course() ?>
+
+										<label><i class="fa fa-book"></i>SEMESTER</label>
+										<input type="text" placeholder="A" />
+										<label><i class="fa fa-code"></i>SECTION CLASS</label>
+										<select>
+											<option>-- Select --</option>
+											<option>STD 5</option>
+											<option>STD 6</option>
+										</select>
+										<label><i class="fa fa-user-secret"></i>SECTION CODE</label>
+										<input type="text" placeholder="PTH05A" />
+										<label><i class="fa fa-info-circle"></i>DESCRIPTION</label>
+										<textarea placeholder="Enter Description Here"></textarea>
+										<div class="col-sm-12">
+											<input type="hidden" name="action" value="Add" />
+											<button type="submit" id="register_button" class="btn btn-success btn-user p-3 m-3"><i class="fa fa-paper-plane"></i> Save</button>
+										</div>
+									</form>
 								</div>
 								<div class="clearfix"></div>
 							</div>
@@ -43,7 +52,7 @@
 					</div>
 					<div class="col-sm-8">
 						<div class="dash-item first-dash-item">
-							<h6 class="item-title"><i class="fa fa-sliders"></i>ALL SECTIONS</h6>
+							<h6 class="item-title"><i class="fa fa-sliders"></i>ALL CLASSROOM</h6>
 							<div class="inner-item">
 								<table id="attendenceDetailedTable" class="display responsive nowrap" cellspacing="0" width="100%">
 									<thead>
