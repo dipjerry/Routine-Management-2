@@ -9,7 +9,7 @@
         <div class="container-fluid">
             <div class="row">
                 <div class="col-lg-12 clear-padding-xs">
-                    <h5 class="page-title"><i class="fa fa-sliders"></i>ALL CALSSES</h5>
+                    <h5 class="page-title"><i class="fa fa-sliders"></i>ALL BRANCH</h5>
                     <div class="section-divider"></div>
                 </div>
             </div>
@@ -17,24 +17,23 @@
                 <div class="col-lg-12 clear-padding-xs">
                     <div class="col-sm-4">
                         <div class="dash-item first-dash-item">
-                            <h6 class="item-title"><i class="fa fa-plus-circle"></i>ADD CLASS</h6>
+                            <h6 class="item-title"><i class="fa fa-plus-circle"></i>ADD BRANCH</h6>
                             <div class="inner-item">
                                 <div class="dash-form">
-                                    <label class="clear-top-margin"><i class="fa fa-book"></i>CLASS</label>
-                                    <input type="text" placeholder="5 STD" />
-                                    <label><i class="fa fa-code"></i>CLASS CODE</label>
-                                    <input type="text" placeholder="PTH05" />
-                                    <label><i class="fa fa-user-secret"></i>CLASS TEACHER</label>
-                                    <select>
-                                        <option>-- Select --</option>
-                                        <option>Lennore Doe</option>
-                                        <option>John Doe</option>
-                                    </select>
-                                    <label><i class="fa fa-info-circle"></i>DESCRIPTION</label>
-                                    <textarea placeholder="Enter Description Here"></textarea>
-                                    <div>
-                                        <a href="#"><i class="fa fa-paper-plane"></i> CREATE</a>
-                                    </div>
+                                    <form action="post" id="branchForm">
+                                        <label class="clear-top-margin"><i class="fa fa-book"></i>COURSE</label>
+                                        <?php echo $object->get_course() ?>
+                                        <label><i class="fa fa-book"></i>BRANCH</label>
+                                        <input type="text" name="course" placeholder="5 STD" />
+                                        <label><i class="fa fa-code"></i>BRANCH CODE</label>
+                                        <input type="text" name="courseCode" placeholder="PTH05" />
+                                        <label><i class="fa fa-info-circle"></i>DESCRIPTION</label>
+                                        <textarea name="description" placeholder="Enter Description Here"></textarea>
+                                        <div class="col-sm-12">
+                                            <input type="hidden" name="action" value="Add" />
+                                            <button type="submit" id="register_button" class="btn btn-success btn-user p-3 m-3"><i class="fa fa-paper-plane"></i> Save</button>
+                                        </div>
+                                    </form>
                                 </div>
                                 <div class="clearfix"></div>
                             </div>
@@ -43,49 +42,19 @@
                     </div>
                     <div class="col-sm-8">
                         <div class="dash-item first-dash-item">
-                            <h6 class="item-title"><i class="fa fa-sliders"></i>ALL CLASSES</h6>
+                            <h6 class="item-title"><i class="fa fa-sliders"></i>ALL BRANCH</h6>
                             <div class="inner-item">
-                                <table id="attendenceDetailedTable" class="display responsive nowrap" cellspacing="0" width="100%">
+                                <table class="table table-bordered" id="course_table" width="100%" cellspacing="0">
                                     <thead>
                                         <tr>
-                                            <th><i class="fa fa-book"></i>CLASS</th>
-                                            <th><i class="fa fa-code"></i>CLASS CODE</th>
-                                            <th><i class="fa fa-user-secret"></i>CLASS TEACHER</th>
-                                            <th><i class="fa fa-info-circle"></i>DESCRIPTION</th>
-                                            <th><i class="fa fa-sliders"></i>ACTION</th>
+                                            <th>COURSE</th>
+                                            <th>BRANCH</th>
+                                            <th>BRANCH CODE</th>
+                                            <th>DESCRIPTION</th>
+                                            <th>Action</th>
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        <tr>
-                                            <td>5 STD</td>
-                                            <td>PTH05</td>
-                                            <td>Lennore Doe</td>
-                                            <td>DESCRIPTION</td>
-                                            <td class="action-link">
-                                                <a class="edit" href="#" title="Edit" data-toggle="modal" data-target="#editDetailModal"><i class="fa fa-edit"></i></a>
-                                                <a class="delete" href="#" title="Delete" data-toggle="modal" data-target="#deleteDetailModal"><i class="fa fa-remove"></i></a>
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <td>4 STD</td>
-                                            <td>PTH04</td>
-                                            <td>John Doe</td>
-                                            <td>DESCRIPTION</td>
-                                            <td class="action-link">
-                                                <a class="edit" href="#" title="Edit" data-toggle="modal" data-target="#editDetailModal"><i class="fa fa-edit"></i></a>
-                                                <a class="delete" href="#" title="Delete" data-toggle="modal" data-target="#deleteDetailModal"><i class="fa fa-remove"></i></a>
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <td>7 STD</td>
-                                            <td>PTH07</td>
-                                            <td>John Doe</td>
-                                            <td>DESCRIPTION</td>
-                                            <td class="action-link">
-                                                <a class="edit" href="#" title="Edit" data-toggle="modal" data-target="#editDetailModal"><i class="fa fa-edit"></i></a>
-                                                <a class="delete" href="#" title="Delete" data-toggle="modal" data-target="#deleteDetailModal"><i class="fa fa-remove"></i></a>
-                                            </td>
-                                        </tr>
                                     </tbody>
                                 </table>
                             </div>
@@ -168,3 +137,55 @@
 </div>
 
 <?php include('includes/footer.php') ?>
+<script>
+    $(document).ready(function() {
+        var dataTable = $('#course_table').DataTable({
+            "processing": true,
+            "serverSide": true,
+            "order": [],
+            "ajax": {
+                url: "./controller/branch_action.php",
+                type: "POST",
+                data: {
+                    action: 'fetch'
+                }
+            },
+            "columnDefs": [{
+                "targets": [3],
+                "orderable": true,
+            }, ],
+        });
+
+        $('#courseForm').on('submit', function(event) {
+            event.preventDefault();
+            if ($('#courseForm').parsley().isValid()) {
+                $.ajax({
+                    url: "./controller/branch_action.php",
+                    method: "POST",
+                    data: new FormData(this),
+                    dataType: 'json',
+                    contentType: false,
+                    processData: false,
+                    beforeSend: function() {
+                        $('#submit_button').attr('disabled', 'disabled');
+                        $('#submit_button').val('wait...');
+                    },
+                    success: function(data) {
+                        $('#submit_button').attr('disabled', false);
+                        if (data.error != '') {
+                            $('#form_message').html(data.error);
+                            $('#submit_button').val('Add');
+                        } else {
+                            $('#productModal').modal('hide');
+                            $('#message').html(data.success);
+                            dataTable.ajax.reload();
+                            setTimeout(function() {
+                                $('#message').html('');
+                            }, 5000);
+                        }
+                    }
+                })
+            }
+        });
+    });
+</script>

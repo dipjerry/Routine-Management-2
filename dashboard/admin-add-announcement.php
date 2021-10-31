@@ -22,27 +22,22 @@
 							<h6 class="item-title"><i class="fa fa-plus-circle"></i>ADD ANNOUNCEMENT</h6>
 							<div class="inner-item">
 								<div class="dash-form">
-									<label class="clear-top-margin"><i class="fa fa-cogs"></i>TYPE</label>
-									<select>
-										<option>-- Select --</option>
-										<option>Academic</option>
-										<option>Administrative</option>
-										<option>Sports</option>
-									</select>
-									<label><i class="fa fa-user-secret"></i>FOR</label>
-									<select>
-										<option>-- Select --</option>
-										<option>All</option>
-										<option>Teacher</option>
-										<option>Student</option>
-									</select>
-									<label><i class="fa fa-code"></i>SUBJECT</label>
-									<input type="text" placeholder="Subject" />
-									<label><i class="fa fa-info-circle"></i>DESCRIPTION</label>
-									<textarea placeholder="Enter Description Here"></textarea>
-									<div>
-										<a href="#"><i class="fa fa-paper-plane"></i> CREATE</a>
-									</div>
+									<form method="post" id="announcementForm" enctype="multipart/form-data">
+										<label><i class="fa fa-code"></i>SUBJECT</label>
+										<input type="text" placeholder="Subject" name="subject" />
+										<label><i class="fa fa-info-circle"></i>MESSAGE</label>
+										<textarea placeholder="Enter Description Here" name="message"></textarea>
+										<label><i class="fa fa-link"></i>LINK</label>
+										<input type="text" placeholder="Enter Link Here" name="link">
+										<label><i class="fa fa-link"></i>Image</label>
+										<input type="file" name="image">
+										<div>
+											<input type="hidden" name="action" value="Add" />
+
+											<button type="submit" id="register_button" class="btn btn-success btn-user p-3 m-3"><i class="fa fa-paper-plane"></i>Save</button>
+
+										</div>
+									</form>
 								</div>
 								<div class="clearfix"></div>
 							</div>
@@ -53,29 +48,18 @@
 						<div class="dash-item first-dash-item">
 							<h6 class="item-title"><i class="fa fa-bullhorn"></i>ALL ANNOUNCEMENTS</h6>
 							<div class="inner-item">
-								<table id="attendenceDetailedTable" class="display responsive nowrap" cellspacing="0" width="100%">
+
+								<table class="table table-bordered" id="category_table" width="100%" cellspacing="0">
 									<thead>
 										<tr>
-											<th><i class="fa fa-cogs"></i>TYPE</th>
-											<th><i class="fa fa-user-secret"></i>FOR</th>
-											<th><i class="fa fa-user-info"></i>SUBJECT</th>
-											<th><i class="fa fa-info-circle"></i>DESCRIPTION</th>
-											<th><i class="fa fa-user"></i>CREATED BY</th>
-											<th><i class="fa fa-sliders"></i>ACTION</th>
+											<th>Subject</th>
+											<th>Message</th>
+											<th>Link</th>
+											<th>Display Image</th>
+											<th>Action</th>
 										</tr>
 									</thead>
 									<tbody>
-										<tr>
-											<td>Academic</td>
-											<td>All</td>
-											<td>End Term Exam</td>
-											<td>Description goes here.</td>
-											<td>John Doe</td>
-											<td class="action-link">
-												<a class="edit" href="#" title="Edit" data-toggle="modal" data-target="#editDetailModal"><i class="fa fa-edit"></i></a>
-												<a class="delete" href="#" title="Delete" data-toggle="modal" data-target="#deleteDetailModal"><i class="fa fa-remove"></i></a>
-											</td>
-										</tr>
 									</tbody>
 								</table>
 							</div>
@@ -158,3 +142,55 @@
 </div>
 
 <?php include('includes/footer.php') ?>
+<script>
+	$(document).ready(function() {
+		var dataTable = $('#category_table').DataTable({
+			"processing": true,
+			"serverSide": true,
+			"order": [],
+			"ajax": {
+				url: "./controller/announcement_action.php",
+				type: "POST",
+				data: {
+					action: 'fetch'
+				}
+			},
+			"columnDefs": [{
+				"targets": [4],
+				"orderable": true,
+			}, ],
+		});
+
+		$('#announcementForm').on('submit', function(event) {
+			event.preventDefault();
+			if ($('#announcementForm').parsley().isValid()) {
+				$.ajax({
+					url: "./controller/announcement_action.php",
+					method: "POST",
+					data: new FormData(this),
+					dataType: 'json',
+					contentType: false,
+					processData: false,
+					beforeSend: function() {
+						$('#submit_button').attr('disabled', 'disabled');
+						$('#submit_button').val('wait...');
+					},
+					success: function(data) {
+						$('#submit_button').attr('disabled', false);
+						if (data.error != '') {
+							$('#form_message').html(data.error);
+							$('#submit_button').val('Add');
+						} else {
+							$('#productModal').modal('hide');
+							$('#message').html(data.success);
+							dataTable.ajax.reload();
+							setTimeout(function() {
+								$('#message').html('');
+							}, 5000);
+						}
+					}
+				})
+			}
+		});
+	});
+</script>

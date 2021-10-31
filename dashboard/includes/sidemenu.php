@@ -29,16 +29,13 @@
             </a>
             <ul class="dropdown-menu">
                 <li>
-                    <a href="admin-add-class.php"><i class="fa fa-caret-right"></i>ADD CLASS</a>
+                    <a href="admin-add-course.php"><i class="fa fa-caret-right"></i>COURSE</a>
                 </li>
                 <li>
-                    <a href="admin-add-section.php"><i class="fa fa-caret-right"></i>ADD SECTION</a>
+                    <a href="admin-add-branch.php"><i class="fa fa-caret-right"></i>BRANCH</a>
                 </li>
                 <li>
-                    <a href="admin-add-class.php"><i class="fa fa-caret-right"></i>VIEW SECTIONS</a>
-                </li>
-                <li>
-                    <a href="admin-add-section.php"><i class="fa fa-caret-right"></i>VIEW CLASSES</a>
+                    <a href="admin-add-semester.php"><i class="fa fa-caret-right"></i>SEMESTER</a>
                 </li>
             </ul>
             <div class="clearfix"></div>

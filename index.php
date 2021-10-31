@@ -1,4 +1,14 @@
 <?php
+include('./dashboard/routine.php');
+$object = new routine();
+
+
+if (!$object->Is_set_up_done()) {
+    header("location:" . $object->base_url . "dashboard/register.php");
+}
+if ($object->is_login()) {
+    header("location:" . $object->base_url . "dashboard/admin-dashboard.php");
+}
 if (isset($_GET['generated']) && $_GET['generated'] == "false") {
     unset($_GET['generated']);
     echo '<script>alert("Timetable not generated yet!!");</script>';

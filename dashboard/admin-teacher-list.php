@@ -20,46 +20,19 @@
 						<div class="dash-item first-dash-item">
 							<h6 class="item-title"><i class="fa fa-user"></i>TEACHERS</h6>
 							<div class="inner-item">
-								<table id="attendenceDetailedTable" class="display responsive nowrap" cellspacing="0" width="100%">
+								<table class="table table-bordered" id="category_table" width="100%" cellspacing="0">
 									<thead>
 										<tr>
-											<th><i class="fa fa-user"></i>NAME</th>
-											<th><i class="fa fa-graduation-cap"></i>HIGHEST DEGREE</th>
-											<th><i class="fa fa-building"></i>UNIVERSITY</th>
-											<th><i class="fa fa-calendar"></i>YEAR PASSED</th>
-											<th><i class="fa fa-puzzle-piece"></i>CGPA</th>
-											<th><i class="fa fa-phone"></i>CONTACT #</th>
-											<th><i class="fa fa-envelope-o"></i>EMAIL</th>
-											<th><i class="fa fa-tasks"></i>ACTION</th>
+											<th>Teacher code</th>
+											<th>Name</th>
+											<th>Gender</th>
+											<th>Phone</th>
+											<th>Email</th>
+											<th>Display Image</th>
+											<th>Action</th>
 										</tr>
 									</thead>
 									<tbody>
-										<tr>
-											<td>JOHN DOE</td>
-											<td>PhD</td>
-											<td>IIT Delhi</td>
-											<td>2008</td>
-											<td>08.65</td>
-											<td>1234567890</td>
-											<td>john@gmail.com</td>
-											<td class="action-link">
-												<a class="edit" href="#" title="Edit" data-toggle="modal" data-target="#editDetailModal"><i class="fa fa-edit"></i></a>
-												<a class="delete" href="#" title="Delete" data-toggle="modal" data-target="#deleteDetailModal"><i class="fa fa-remove"></i></a>
-											</td>
-										</tr>
-										<tr>
-											<td>LENNORE DOE</td>
-											<td>MSc</td>
-											<td>Harvard</td>
-											<td>2006</td>
-											<td>07.65</td>
-											<td>0999878775</td>
-											<td>lennore@gmail.com</td>
-											<td class="action-link">
-												<a class="edit" href="#" title="Edit" data-toggle="modal" data-target="#editDetailModal"><i class="fa fa-edit"></i></a>
-												<a class="delete" href="#" title="Delete" data-toggle="modal" data-target="#deleteDetailModal"><i class="fa fa-remove"></i></a>
-											</td>
-										</tr>
 									</tbody>
 								</table>
 							</div>
@@ -155,3 +128,26 @@
 </div>
 
 <?php include('includes/footer.php') ?>
+<script>
+	$(document).ready(function() {
+
+		var dataTable = $('#category_table').DataTable({
+			"processing": true,
+			"serverSide": true,
+			"order": [],
+			"ajax": {
+				url: "./controller/teacher_action.php",
+				type: "POST",
+				data: {
+					action: 'fetch'
+				}
+			},
+			"columnDefs": [{
+				"targets": [5],
+				"orderable": true,
+			}, ],
+		});
+
+
+	});
+</script>

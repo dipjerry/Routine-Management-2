@@ -129,7 +129,7 @@
                     </li>
                     <li>
                         <div class="all-notifications">
-                            <a href="http://localhost/Routine%20Management%202/">LOGOUT</a>
+                            <a href="http://localhost/Routine%20Management/">LOGOUT</a>
                         </div>
                     </li>
                 </ul>
