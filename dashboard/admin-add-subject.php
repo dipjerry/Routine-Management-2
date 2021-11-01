@@ -14,6 +14,7 @@
 					<div class="section-divider"></div>
 				</div>
 			</div>
+			<span id="message"></span>
 			<div class="row">
 				<div class="col-lg-12 clear-padding-xs">
 					<div class="col-sm-4">
@@ -21,27 +22,37 @@
 							<h6 class="item-title"><i class="fa fa-plus-circle"></i>ADD SUBJECT</h6>
 							<div class="inner-item">
 								<div class="dash-form">
-									<label class="clear-top-margin"><i class="fa fa-book"></i>NAME</label>
-									<input type="text" placeholder="Basic Mathematics" />
-									<label><i class="fa fa-code"></i>SUBJECT CODE</label>
-									<input type="text" placeholder="MTH101" />
-									<label><i class="fa fa-code"></i>CLASS</label>
-									<select>
-										<option>-- Select --</option>
-										<option>STD 5</option>
-										<option>STD 6</option>
-									</select>
-									<label><i class="fa fa-code"></i>TEACHER</label>
-									<select>
-										<option>-- Select --</option>
-										<option>Lennore Doe</option>
-										<option>John Doe</option>
-									</select>
-									<label><i class="fa fa-info-circle"></i>DESCRIPTION</label>
-									<textarea placeholder="Enter Description Here"></textarea>
-									<div>
-										<a href="#"><i class="fa fa-paper-plane"></i> CREATE</a>
-									</div>
+									<form action="post" id="subjectForm">
+										<label class="clear-top-margin"><i class="fa fa-book"></i>NAME</label>
+										<input type="text" name="subject" placeholder="Basic Mathematics" />
+										<label><i class="fa fa-code"></i>SUBJECT CODE</label>
+										<input type="text" name="subject_code" placeholder="MTH101" />
+										<label><i class="fa fa-book"></i>COURSE</label>
+										<?php echo $object->get_course() ?>
+										<label><i class="fa fa-book"></i>SEMESTER</label>
+										<div id="semester_container">
+											<select name="branch" id="branch_select" disabled required>
+												<option value="" readonly>Select semester</option>
+											</select>
+										</div>
+										<label><i class="fa fa-book"></i>BRANCH</label>
+										<div id="branch_container">
+											<select name="branch" id="branch_select" disabled required>
+												<option value="" readonly>Select branch</option>
+											</select>
+										</div>
+
+
+										<label><i class="fa fa-code"></i>TEACHER</label>
+										<?php echo $object->get_teacher() ?>
+
+										<label><i class="fa fa-info-circle"></i>DESCRIPTION</label>
+										<textarea name="description" placeholder="Enter Description Here"></textarea>
+										<div class="col-sm-12">
+											<input type="hidden" name="action" value="Add" />
+											<button type="submit" id="register_button" class="btn btn-success btn-user p-3 m-3"><i class="fa fa-paper-plane"></i> Save</button>
+										</div>
+									</form>
 								</div>
 								<div class="clearfix"></div>
 							</div>
@@ -52,40 +63,21 @@
 						<div class="dash-item first-dash-item">
 							<h6 class="item-title"><i class="fa fa-sliders"></i>ALL SUBJECTS</h6>
 							<div class="inner-item">
-								<table id="attendenceDetailedTable" class="display responsive nowrap" cellspacing="0" width="100%">
+								<table id="subjectTable" class="display responsive nowrap" cellspacing="0" width="100%">
 									<thead>
 										<tr>
 											<th><i class="fa fa-book"></i>NAME</th>
 											<th><i class="fa fa-code"></i>CODE</th>
-											<th><i class="fa fa-cogs"></i>CLASS</th>
+											<th><i class="fa fa-cogs"></i>COURSE</th>
+											<th><i class="fa fa-cogs"></i>BRANCH</th>
+											<th><i class="fa fa-cogs"></i>SEMESTER</th>
 											<th><i class="fa fa-user-secret"></i>TEACHER</th>
 											<th><i class="fa fa-info-circle"></i>DESCRIPTION</th>
 											<th><i class="fa fa-sliders"></i>ACTION</th>
 										</tr>
 									</thead>
 									<tbody>
-										<tr>
-											<td>Mathematics</td>
-											<td>MTH101</td>
-											<td>PTH05A</td>
-											<td>Lennore Doe</td>
-											<td>Desc</td>
-											<td class="action-link">
-												<a class="edit" href="#" title="Edit" data-toggle="modal" data-target="#editDetailModal"><i class="fa fa-edit"></i></a>
-												<a class="delete" href="#" title="Delete" data-toggle="modal" data-target="#deleteDetailModal"><i class="fa fa-remove"></i></a>
-											</td>
-										</tr>
-										<tr>
-											<td>Biology</td>
-											<td>BIO101</td>
-											<td>PTH05A</td>
-											<td>John Doe</td>
-											<td>Description</td>
-											<td class="action-link">
-												<a class="edit" href="#" title="Edit" data-toggle="modal" data-target="#editDetailModal"><i class="fa fa-edit"></i></a>
-												<a class="delete" href="#" title="Delete" data-toggle="modal" data-target="#deleteDetailModal"><i class="fa fa-remove"></i></a>
-											</td>
-										</tr>
+
 									</tbody>
 								</table>
 							</div>
@@ -176,3 +168,71 @@
 </div>
 
 <?php include('includes/footer.php') ?>
+<script>
+	$(document).ready(function() {
+		var dataTable = $('#subjectTable').DataTable({
+			"processing": true,
+			"serverSide": true,
+			"order": [],
+			"ajax": {
+				url: "./controller/subject_action.php",
+				type: "POST",
+				data: {
+					action: 'fetch'
+				}
+			},
+			"columnDefs": [{
+				"targets": [5],
+				"orderable": true,
+			}, ],
+		});
+		$('#subjectForm').on('submit', function(event) {
+			event.preventDefault();
+			if ($('#subjectForm').parsley().isValid()) {
+				$.ajax({
+					url: "./controller/subject_action.php",
+					method: "POST",
+					data: new FormData(this),
+					dataType: 'json',
+					contentType: false,
+					processData: false,
+					beforeSend: function() {
+						$('#submit_button').attr('disabled', 'disabled');
+						$('#submit_button').val('wait...');
+					},
+					success: function(data) {
+						$('#submit_button').attr('disabled', false);
+						if (data.success != '') {
+							$('#subjectForm').trigger("reset");
+							$('#message').html(data.success);
+							dataTable.ajax.reload();
+							setTimeout(function() {
+								$('#message').html('');
+							}, 5000);
+						} else {
+							$('#form_message').html(data.error);
+							$('#submit_button').val('Add');
+
+						}
+					}
+				})
+			}
+		});
+		$(document).on('change', '#course_select', function() {
+			let course = $(this).val();
+			$.ajax({
+				url: "./controller/allot_classroom_action.php",
+				data: {
+					course: course,
+					action: 'dropDownFill'
+				},
+				type: 'POST',
+				success: function(response) {
+					const dropDown = JSON.parse(response);
+					$("#semester_container").html(dropDown.semester);
+					$("#branch_container").html(dropDown.branch);
+				}
+			});
+		});
+	});
+</script>

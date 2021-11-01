@@ -43,20 +43,12 @@
             </ul>
             <div class="clearfix"></div>
         </li>
-        <li class="dropdown">
-            <a href="#" class="dropdown-toggle" data-toggle="dropdown">
-                <i class="fa fa-book menu-icon"></i> SUBJECTS <span class="caret"></span>
-            </a>
-            <ul class="dropdown-menu">
-                <li>
-                    <a href="admin-add-subject.php"><i class="fa fa-caret-right"></i>ADD</a>
-                </li>
-                <li>
-                    <a href="admin-add-subject.php"><i class="fa fa-caret-right"></i>VIEW SUBJECTS</a>
-                </li>
-            </ul>
-            <div class="clearfix"></div>
+        <li>
+            <a href="admin-add-subject.php"><i class="fa fa-book menu-icon"></i>SUBJECT</a>
         </li>
+        <!-- <li>
+            <a href="admin-add-subject.php"><i class="fa fa-book menu-icon">VIEW SUBJECTS</a>
+        </li> -->
         <li class="dropdown">
             <a href="#" class="dropdown-toggle" data-toggle="dropdown">
                 <i class="fa fa-calendar menu-icon"></i> TIMETABLE <span class="caret"></span>

@@ -101,6 +101,23 @@ class routine
         $html .= '</select>';
         return $html;
     }
+    function get_teacher()
+    {
+        $this->query = "
+				SELECT teacher_code , name FROM teacher_list   
+				ORDER BY name ASC
+				";
+        $result = $this->get_result();
+        $html = '
+		<select name="teacher" id="teacher_select" required>
+			<option value="" readonly>Select teacher</option>
+		';
+        foreach ($result as $values) {
+            $html .= '<option value="' . $values['teacher_code'] . '">' . $values['name'] . '</option>';
+        }
+        $html .= '</select>';
+        return $html;
+    }
     function get_course_name($id)
     {
         $this->query = "
