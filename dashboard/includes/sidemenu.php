@@ -35,6 +35,9 @@
                     <a href="admin-add-branch.php"><i class="fa fa-caret-right"></i>BRANCH</a>
                 </li>
                 <li>
+                    <a href="admin-add-classroom.php"><i class="fa fa-caret-right"></i>CLASSROOM</a>
+                </li>
+                <li>
                     <a href="admin-add-semester.php"><i class="fa fa-caret-right"></i>SEMESTER</a>
                 </li>
             </ul>

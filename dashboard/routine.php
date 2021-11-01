@@ -75,7 +75,7 @@ class routine
 				";
         $result = $this->get_result();
         $html = '
-		<select name="course" id="course_selet" required>
+		<select name="course" id="course_select" required>
 			<option value="" readonly>Select Course</option>
 		';
         foreach ($result as $values) {
@@ -84,18 +84,72 @@ class routine
         $html .= '</select>';
         return $html;
     }
+    function get_free_classroom()
+    {
+        $this->query = "
+				SELECT classroom_code FROM classroom where status = 'free'   
+				ORDER BY classroom_code ASC
+				";
+        $result = $this->get_result();
+        $html = '
+		<select name="classroom" id="classroom_select" required>
+			<option value="" readonly>Select Classroom</option>
+		';
+        foreach ($result as $values) {
+            $html .= '<option value="' . $values['classroom_code'] . '">' . $values['classroom_code'] . '</option>';
+        }
+        $html .= '</select>';
+        return $html;
+    }
     function get_course_name($id)
     {
-        // var_dump($id);
         $this->query = "
 		SELECT course_name FROM course where  course_code = '" . $id . "' LIMIT 1
 		";
-        // var_dump($this->query);
 
         $result = $this->get_result();
         foreach ($result as $row) {
             return $row['course_name'];
         }
+    }
+    function get_branch_name_from_code($id)
+    {
+        $this->query = "
+		SELECT branch FROM branch where  branch_code = '" . $id . "' LIMIT 1
+		";
+
+        $result = $this->get_result();
+        foreach ($result as $row) {
+            return $row['branch'];
+        }
+    }
+    function get_course_duration($course)
+    {
+        $this->query = "
+		SELECT course_duration FROM course where  course_code = '" . $course . "' LIMIT 1
+		";
+
+        $result = $this->get_result();
+        foreach ($result as $row) {
+            return $row['course_duration'];
+        }
+    }
+    function get_branch_name($id)
+    {
+        $this->query = "
+        SELECT branch , branch_code FROM branch where course = '" . $id . "'    
+        ORDER BY branch ASC
+        ";
+
+        // var_dump($this->query);
+        $result = $this->get_result();
+        $html = '<select name="branch" id="branch_select" required>';
+        $html .= '<option value="" readonly>Select branch</option>';
+        foreach ($result as $values) {
+            $html .= '<option value="' . $values['branch_code'] . '">' . $values['branch'] . '</option>';
+        }
+        $html .= '</select>';
+        return $html;
     }
 
     function clean_input($string)
@@ -138,5 +192,30 @@ class routine
         imagepng($image, $path);
         imagedestroy($image);
         return $path;
+    }
+    function semester_list($limit)
+    {
+        // var_dump($limit);
+        $quantity_unit = array(
+            '1' => 'Semester 1',
+            '2' => 'Semester 2',
+            '3' => 'Semester 3',
+            '4' => 'Semester 4',
+            '5' => 'Semester 5',
+            '6' => 'Semester 6',
+            '7' => 'Semester 7',
+            '8' => 'Semester 8',
+
+        );
+        $html = '
+		<select name="semester" id="semester_list" required>
+			<option value="">Select Semester</option>
+		';
+        for ($i = 1; $i < $limit + 1; $i++) {
+
+            $html .= '<option value="' . array_search($quantity_unit[$i], $quantity_unit) . '">' . $quantity_unit[$i] . '</option>';
+        }
+        $html .= '</select>';
+        return $html;
     }
 }
