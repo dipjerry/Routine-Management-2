@@ -21,25 +21,33 @@
 						<div class="dash-item first-dash-item">
 							<h6 class="item-title"><i class="fa fa-search"></i>MAKE SELECTION</h6>
 							<div class="inner-item dash-search-form">
-								<div class="col-sm-4">
-									<label>CLASS</label>
-									<select>
-										<option>5th STD</option>
-										<option>6th STD</option>
-										<option>7th STD</option>
-									</select>
-								</div>
-								<div class="col-sm-4">
-									<label>SECTION</label>
-									<select>
-										<option>PTH05A</option>
-										<option>PTH05B</option>
-										<option>PTH06A</option>
-										<option>PTH06B</option>
-									</select>
-								</div>
-								<div class="col-sm-4">
-									<button type="submit" class="submit-btn"><i class="fa fa-search"></i>SELECT</button>
+								<div class="dash-form">
+									<form action="" method="post" id="timetablePreview">
+										<div class="col-sm-3">
+											<label><i class="fa fa-book"></i>COURSE</label>
+											<?php echo $object->get_course() ?>
+										</div>
+										<div class="col-sm-3">
+											<label><i class="fa fa-book"></i>BRANCH</label>
+											<div id="branch_container">
+												<select name="branch" id="branch_select" disabled required>
+													<option value="" readonly>Select branch</option>
+												</select>
+											</div>
+										</div>
+										<div class="col-sm-3">
+											<label><i class="fa fa-book"></i>SEMESTER</label>
+											<div id="semester_container">
+												<select name="branch" id="branch_select" disabled required>
+													<option value="" readonly>Select semester</option>
+												</select>
+											</div>
+										</div>
+										<div class="col-sm-4">
+											<input type="hidden" name="action" value="display">
+											<button type="button" class="submit-btn" id="preview-btn"><i class="fa fa-search"></i>SHOW</button>
+										</div>
+									</form>
 								</div>
 								<div class="clearfix"></div>
 							</div>
@@ -63,7 +71,7 @@
 											<th><i class="fa fa-calendar"></i>ACTION</th>
 										</tr>
 									</thead>
-									<tbody>
+									<tbody id="getRoutine">
 
 									</tbody>
 								</table>
@@ -193,3 +201,124 @@
 	</div>
 </div>
 <?php include('includes/footer.php') ?>
+
+<script>
+	$(document).ready(function() {
+		// var dataTable = $('#routineTable').DataTable({
+		// 	"processing": true,
+		// 	"serverSide": true,
+		// 	"order": [],
+		// 	"ajax": {
+		// 		url: "./controller/timetable_action.php",
+		// 		type: "POST",
+		// 		data: {
+		// 			action: 'fetch'
+		// 		}
+		// 	},
+		// 	"columnDefs": [{
+		// 		"targets": [4],
+		// 		"orderable": true,
+		// 	}, ],
+		// });
+		$('#preview-btn').on('click', function(event) {
+			const course = $('#course_select').val();
+			const branch = $('#branch_select').val();
+			const semester = $('#semester_list').val();
+			$.ajax({
+				url: "./controller/preview_timetable_action.php",
+				type: "POST",
+				data: {
+					course: course,
+					branch: branch,
+					semester: semester,
+					action: 'display'
+				},
+				type: 'POST',
+				success: function(data) {
+					console.log(data);
+					alert(data);
+					// $('#submit_button').attr('disabled', false);
+					$('#getRoutine').html(data);
+
+
+				}
+			})
+
+		});
+		// $('#timetablePreview').on('submit', function(event) {
+		// 	event.preventDefault();
+		// 	if ($('#timetablePreview').parsley().isValid()) {
+		// 		$.ajax({
+		// 			url: "./controller/preview_timetable_action.php",
+		// 			method: "POST",
+		// 			data: new FormData(this),
+		// 			dataType: 'json',
+		// 			// contentType: false,
+		// 			processData: false,
+		// 			success: function(data) {
+		// 				console.log(data);
+		// 				alert(data);
+		// 				// $('#submit_button').attr('disabled', false);
+		// 				$('#getRoutine').html(data);
+		// 				// if (data.error != '') {
+		// 				// 	$('#form_message').html(data.error);
+		// 				// 	$('#submit_button').val('Add');
+		// 				// } else {
+		// 				// 	$('#productModal').modal('hide');
+		// 				// 	$('#message').html(data.success);
+		// 				// 	dataTable.ajax.reload();
+		// 				// 	setTimeout(function() {
+		// 				// 		$('#message').html('');
+		// 				// 	}, 5000);
+		// 				// }
+
+
+		// 			}
+		// 		})
+		// 	}
+		// });
+
+		$(document).on('change', '#course_select', function() {
+			let course = $(this).val();
+			$.ajax({
+				url: "./controller/allot_classroom_action.php",
+				data: {
+					course: course,
+					action: 'dropDownFill'
+				},
+				type: 'POST',
+				success: function(response) {
+					const dropDown = JSON.parse(response);
+					$("#semester_container").html(dropDown.semester);
+					$("#branch_container").html(dropDown.branch);
+					// $("#slot_container").html(slot);
+				}
+			});
+		});
+
+		$(document).on('click', '.delete_button', function() {
+			var id = $(this).data('id');
+			$('#delete_hidden_id').val(id);
+			$('#deleteDetailModal').modal('show');
+		});
+		$(document).on('click', '#delete', function() {
+			var id = $('#delete_hidden_id').val();
+			$.ajax({
+				url: "./controller/allot_classroom_action.php",
+				method: "POST",
+				data: {
+					id: id,
+					action: 'delete'
+				},
+				success: function(data) {
+					$('#message').html(data);
+					dataTable.ajax.reload();
+					setTimeout(function() {
+						$('#message').html('');
+					}, 5000);
+				}
+			})
+
+		});
+	});
+</script>
