@@ -101,6 +101,18 @@ class routine
         $html .= '</select>';
         return $html;
     }
+    function get_classroom($course, $branch, $semester)
+    {
+        $this->query = "
+				SELECT classroom FROM classroom_allotment where course_code = '" . $course . "' AND branch_code = '" . $branch . "' AND semester = '" . $semester . "'   
+				ORDER BY course_code ASC
+				";
+        $result = $this->get_result();
+
+        foreach ($result as $row) {
+            return $row['classroom'];
+        }
+    }
     function get_teacher()
     {
         $this->query = "
@@ -361,7 +373,6 @@ class routine
     function free_slot($day, $course, $branch, $semester, $teacher)
     {
         $generatedTable = $this->cleanTable($course . $branch . $semester);
-        // var_dump($generatedTable);
         $course = $this->free_course_slot($day, $generatedTable);
         $teacher =  $this->free_teacher($day, $teacher);
         if ($course == '' or $teacher == '') {
@@ -372,17 +383,13 @@ class routine
 		<select name="free_slot" id="free_slot" required>
 			<option value="">Select slot</option>
 		';
-        // var_dump($freeSlot);
-        for ($i = 1; $i <= count($freeSlot); $i++) {
+        foreach ($freeSlot as $slot) {
 
-            $html .= '<option value="' . $freeSlot[$i] . '">' . $freeSlot[$i] . '</option>';
+            $html .= '<option value="' . $slot . '">' . $slot . '</option>';
         }
         $html .= '</select>';
         return $html;
     }
-
-
-
 
     function no_timetable_subject()
     {

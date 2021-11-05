@@ -96,33 +96,18 @@
 						<div class="dash-item">
 							<h6 class="item-title"><i class="fa fa-sliders"></i>ALL SLOTS</h6>
 							<div class="inner-item">
-								<table id="attendenceDetailedTable" class="display responsive nowrap" cellspacing="0" width="100%">
+								<table id="routineTable" class="display responsive nowrap" cellspacing="0" width="100%">
 									<thead>
 										<tr>
-											<th><i class="fa fa-calendar"></i>DAY</th>
-											<th><i class="fa fa-clock-o"></i>SLOT</th>
-											<th><i class="fa fa-book"></i>CLASS</th>
-											<th><i class="fa fa-cogs"></i>SECTION</th>
-											<th><i class="fa fa-code"></i>SUBJECT</th>
-											<th><i class="fa fa-user"></i>TEACHER</th>
-											<th><i class="fa fa-home"></i>ROOM</th>
-											<th><i class="fa fa-sliders"></i>ACTION</th>
+											<th><i class="fa fa-clock-o"></i>WEEKENDS</th>
+											<th><i class="fa fa-calendar"></i>SUBJECT</th>
+											<th><i class="fa fa-calendar"></i>PERIOD</th>
+											<th><i class="fa fa-calendar"></i>STATUS</th>
+											<th><i class="fa fa-calendar"></i>ACTION</th>
+
 										</tr>
 									</thead>
 									<tbody>
-										<tr>
-											<td>Monday</td>
-											<td>09-10 AM</td>
-											<td>5 STD</td>
-											<td>A</td>
-											<td>MTH101</td>
-											<td>John Doe</td>
-											<td>101</td>
-											<td class="action-link">
-												<a class="edit" href="#" title="Edit" data-toggle="modal" data-target="#editDetailModal"><i class="fa fa-edit"></i></a>
-												<a class="delete" href="#" title="Delete" data-toggle="modal" data-target="#deleteDetailModal"><i class="fa fa-remove"></i></a>
-											</td>
-										</tr>
 
 									</tbody>
 								</table>
@@ -210,19 +195,19 @@
 
 <script>
 	$(document).ready(function() {
-		var dataTable = $('#classroomDetailedTable').DataTable({
+		var dataTable = $('#routineTable').DataTable({
 			"processing": true,
 			"serverSide": true,
 			"order": [],
 			"ajax": {
-				url: "./controller/allot_classroom_action.php",
+				url: "./controller/timetable_action.php",
 				type: "POST",
 				data: {
 					action: 'fetch'
 				}
 			},
 			"columnDefs": [{
-				"targets": [3],
+				"targets": [4],
 				"orderable": true,
 			}, ],
 		});

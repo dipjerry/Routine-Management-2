@@ -49,57 +49,22 @@
 						<div class="dash-item">
 							<h6 class="item-title"><i class="fa fa-edit"></i>EDIT TIMETABLE</h6>
 							<div class="inner-item">
-								<table id="attendenceDetailedTable" class="display responsive nowrap" cellspacing="0" width="100%">
+								<table id="routineTable" class="display responsive nowrap" cellspacing="0" width="100%">
 									<thead>
 										<tr>
-											<th><i class="fa fa-clock-o"></i>TIMINGS</th>
-											<th><i class="fa fa-calendar"></i>MONDAY</th>
-											<th><i class="fa fa-calendar"></i>TUESDAY</th>
-											<th><i class="fa fa-calendar"></i>WEDNESDAY</th>
-											<th><i class="fa fa-calendar"></i>THURSDAY</th>
-											<th><i class="fa fa-calendar"></i>FRIDAY</th>
-											<th><i class="fa fa-calendar"></i>SATURDAY</th>
-											<th><i class="fa fa-tasks"></i>ACTION</th>
+											<th><i class="fa fa-clock-o"></i>WEEKENDS</th>
+											<th><i class="fa fa-calendar"></i>PERIOD 1</th>
+											<th><i class="fa fa-calendar"></i>PERIOD 2</th>
+											<th><i class="fa fa-calendar"></i>PERIOD 3</th>
+											<th><i class="fa fa-calendar"></i>PERIOD 4</th>
+											<th><i class="fa fa-calendar"></i>PERIOD 5</th>
+											<th><i class="fa fa-calendar"></i>BREAK</th>
+											<th><i class="fa fa-calendar"></i>PERIOD 6</th>
+											<th><i class="fa fa-calendar"></i>ACTION</th>
 										</tr>
 									</thead>
 									<tbody>
-										<tr>
-											<td>09-10 AM</td>
-											<td>
-												<span>Lecture: MTH101</span>
-												<span>Room: 601</span>
-												<span>Teacher: John</span>
-											</td>
-											<td>
-												<span>Lecture: PHY101</span>
-												<span>Room: 303</span>
-												<span>Teacher: Lennore</span>
-											</td>
-											<td>
-												<span>Lecture: BIO101</span>
-												<span>Room: 302</span>
-												<span>Teacher: John</span>
-											</td>
-											<td>
-												<span>Lecture: PHY101</span>
-												<span>Room: 303</span>
-												<span>Teacher: Lennore</span>
-											</td>
-											<td>
-												<span>Lecture: BIO101</span>
-												<span>Room: 202</span>
-												<span>Teacher: John</span>
-											</td>
-											<td>
-												<span>Lecture: MTH101</span>
-												<span>Room: 601</span>
-												<span>Teacher: John</span>
-											</td>
-											<td class="action-link">
-												<a class="edit" href="#" title="Edit" data-toggle="modal" data-target="#editDetailModal"><i class="fa fa-edit"></i></a>
-												<a class="delete" href="#" title="Delete" data-toggle="modal" data-target="#deleteDetailModal"><i class="fa fa-remove"></i></a>
-											</td>
-										</tr>
+
 									</tbody>
 								</table>
 								<div class="table-action-box">
