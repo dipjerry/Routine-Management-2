@@ -79,17 +79,27 @@ if (isset($_POST["action"])) {
                 ':semester'                  =>    $object->clean_input($_POST['semester']),
                 ':teacher'                    =>    $object->clean_input($_POST['teacher']),
                 ':description'                           =>    $object->clean_input($_POST['description']),
+                ':status'                           =>    'no',
             );
             $object->query = "
-			INSERT INTO subject (name ,subject_code,course, semester, branch,teacher,description)
-			VALUES (:subject,:subject_code,:course_code, :semester, :branch_code,:teacher,:description)
+			INSERT INTO subject (name ,subject_code,course, semester, branch,teacher,description,status)
+			VALUES (:subject,:subject_code,:course_code, :semester, :branch_code,:teacher,:description,:status)
 			";
             $object->execute($data);
-            $success = '<div class="alert alert-success">ClassRoom Added</div>';
+            $success = '<div class="alert alert-success">Subjects Added</div>';
         }
         $output = array(
             'success'    =>    $success
         );
         echo json_encode($output);
+    }
+    if ($_POST["action"] == 'delete') {
+        $id = $_POST["id"];
+        $object->query = "SELECT * FROM subject WHERE id = '$id'";
+        $result = $object->get_result();
+        foreach ($result as $row) {
+            $resultset[] = $row;
+        }
+        echo '<div class="alert alert-success">Product Deleted</div>';
     }
 }

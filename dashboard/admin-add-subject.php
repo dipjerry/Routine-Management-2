@@ -94,20 +94,24 @@
 		</div>
 
 		<!-- Delete Modal -->
-		<div id="deleteDetailModal" class="modal fade" role="dialog">
+		<div id="deleteDetailModal" style="z-index:9999 !important;" class="modal">
 			<div class="modal-dialog">
 				<!-- Modal content-->
 				<div class="modal-content">
 					<div class="modal-header">
+						<h4 class="modal-title bill_details" id="modal_title">DELETE SUBJECT</h4>
 						<button type="button" class="close" data-dismiss="modal">&times;</button>
-						<h4 class="modal-title"><i class="fa fa-trash"></i>DELETE SUBJECT</h4>
 					</div>
 					<div class="modal-body">
 						<div class="table-action-box">
-							<a href="#" class="save"><i class="fa fa-check"></i>YES</a>
-							<a href="#" class="cancel" data-dismiss="modal"><i class="fa fa-ban"></i>CLOSE</a>
+							<h3>Are you sure you want to delete this subject?</h3>
 						</div>
 						<div class="clearfix"></div>
+					</div>
+					<div class="modal-footer">
+						<input type="hidden" name="delete_hidden_id" id="delete_hidden_id">
+						<button type="button" class="btn btn-danger" data-dismiss="modal">Cancel</button>
+						<button type="button" class="btn btn-success" id="delete" data-dismiss="modal"> &nbsp;Okay &nbsp;</button>
 					</div>
 				</div>
 			</div>
@@ -233,6 +237,30 @@
 					$("#branch_container").html(dropDown.branch);
 				}
 			});
+		});
+		$(document).on('click', '.delete_button', function() {
+			var id = $(this).data('id');
+			$('#delete_hidden_id').val(id);
+			$('#deleteDetailModal').modal('show');
+		});
+		$(document).on('click', '#delete', function() {
+			var id = $('#delete_hidden_id').val();
+			$.ajax({
+				url: "./controller/subject_action.php",
+				method: "POST",
+				data: {
+					id: id,
+					action: 'delete'
+				},
+				success: function(data) {
+					$('#message').html(data);
+					dataTable.ajax.reload();
+					setTimeout(function() {
+						$('#message').html('');
+					}, 5000);
+				}
+			})
+
 		});
 	});
 </script>

@@ -60,31 +60,61 @@ if (isset($_POST["action"])) {
     if ($_POST["action"] == 'Add') {
 
         $success = '';
-
+        $error = '';
         $data = array(
-            ':course_code'                  =>    $object->clean_input($_POST['course']),
-            ':branch_code'                  =>    $object->clean_input($_POST['branch']),
-            ':semester'                  =>    $object->clean_input($_POST['semester']),
-            ':classroom'                    =>    $object->clean_input($_POST['classroom']),
-            ':status'                           =>    'notgenerated',
+            ':branchCode'        =>    $_POST["branch"],
+            ':semester'        =>    $_POST["semester"],
+            ':course'        =>    $_POST["course"]
         );
-        $object->query = "
+        $object->query = "SELECT * FROM classroom_allotment WHERE  branch_code = :branchCode and semester = :semester and course_code = :course";
+        $object->execute($data);
+        if ($object->row_count() > 0) {
+            $error = '<div class="alert alert-danger">This course has already alloted a classroom</div>';
+        } else {
+            $data = array(
+                ':course_code'                  =>    $object->clean_input($_POST['course']),
+                ':branch_code'                  =>    $object->clean_input($_POST['branch']),
+                ':semester'                  =>    $object->clean_input($_POST['semester']),
+                ':classroom'                    =>    $object->clean_input($_POST['classroom']),
+                ':status'                           =>    'notgenerated',
+            );
+            $object->query = "
 			INSERT INTO classroom_allotment (course_code, branch_code, semester, classroom, status)
 			VALUES (:course_code,:branch_code,:semester,:classroom, :status)
 			";
-        $object->execute($data);
+            $object->execute($data);
 
-        $data = array(
-            ':classroom_code'                  =>    $object->clean_input($_POST['classroom']),
-            ':status'                  =>    'alloted',
-        );
-        $object->query = "
+            $data = array(
+                ':classroom_code'                  =>    $object->clean_input($_POST['classroom']),
+                ':status'                  =>    'alloted',
+            );
+            $object->query = "
 			UPDATE classroom SET status = :status where classroom_code = :classroom_code
 			";
-        $object->execute($data);
-        $success = '<div class="alert alert-success">ClassRoom Added</div>';
+            $object->execute($data);
+            $generatedTable = $object->cleanTable($_POST['course'] . $_POST['branch'] . $_POST['semester']);
+            $object->query =  "CREATE TABLE " . $generatedTable . " (
+                day VARCHAR(10) PRIMARY KEY, 
+                period1 VARCHAR(30),
+                period2 VARCHAR(30),
+                period3 VARCHAR(30),
+                period4 VARCHAR(30),
+                period5 VARCHAR(30),
+                period6 VARCHAR(30)
+                )";
+            $object->execute();
+            $days = array('monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday');
+            for ($i = 0; $i < 6; $i++) {
+                $day = $days[$i];
+                $object->query = "INSERT into " . $generatedTable . " VALUES('$day','','','','','','')";
+                $object->execute();
+            }
+
+            $success = '<div class="alert alert-success">ClassRoom Added</div>';
+        }
         $output = array(
-            'success'    =>    $success
+            'success'    =>    $success,
+            'error'    =>    $error
         );
         echo json_encode($output);
     }
@@ -98,5 +128,13 @@ if (isset($_POST["action"])) {
             'semester'    =>    $semester
         );
         echo json_encode($output);
+    }
+    if ($_POST["action"] == 'delete') {
+        $object->query = "
+		DELETE FROM drink_quantity_table 
+		WHERE quantity_id = '" . $_POST["id"] . "'
+		";
+        $object->execute();
+        echo '<div class="alert alert-success">Quantity Deleted</div>';
     }
 }

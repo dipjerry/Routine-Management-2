@@ -92,26 +92,6 @@
 			</div>
 			<div class="row">
 				<div class="col-lg-12 clear-padding-xs">
-					<!-- <div class="col-sm-8">
-						<div>
-							<div class="my-msg dash-item">
-								<h6 class="item-title"><i class="fa fa-bar-chart"></i>STUDENT ATTENDENCE TREND</h6>
-								<div class="inner-item">
-									<div class="summary-chart">
-										<canvas id="studentAttendenceLine" height="100px"></canvas>
-										<div class="chart-legends">
-											<span class="red">ABSENT</span>
-											<span class="orange">ON LEAVE</span>
-											<span class="green">PRESENT</span>
-										</div>
-										<div class="chart-title">
-											<h6 class="bottom-title">STUDENT ATTENDENCE TREND</h6>
-										</div>
-									</div>
-								</div>
-							</div>
-						</div>
-					</div> -->
 					<div class="col-sm-8">
 						<div class="my-msg dash-item">
 							<h6 class="item-title"><i class="fa fa-bullhorn"></i>ANNOUNCEMENTS</h6>
@@ -120,190 +100,40 @@
 									<li class="active">
 										<a href="#1" data-toggle="tab"><i class="fa fa-graduation-cap"></i><span>ACADEMICS</span></a>
 									</li>
-									<li>
-										<a href="#2" data-toggle="tab"><i class="fa fa-users"></i><span>ADMISSIONS</span></a>
-									</li>
-									<li>
-										<a href="#3" data-toggle="tab"><i class="fa fa-trophy"></i><span>SPORTS</span></a>
-									</li>
+
 								</ul>
 								<div class="tab-content">
 									<div class="tab-pane active" id="1">
-										<div class="announcement-item">
-											<h5>Guest lecture on fine arts by Smith.<span class="new">New</span></h5>
-											<h6><i class="fa fa-clock-o"></i>06-24-2017, 13:34</h6>
-											<p>Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.</p>
-											<div class="posted-by">
-												<p>Thanks,</p>
-												<h6>John Doe, Principal</h6>
+										<?php
+										$object->query = "
+										  SELECT * FROM announcement   
+										  ORDER BY id DESC
+										  ";
+										$result = $object->get_result();
+
+										foreach ($result as $values) {
+										?>
+											<div class="announcement-item">
+												<h1><?php echo $values['subject'] ?><span class="new">New</span></h2>
+													<div class="long_thumb_img">
+														<?php if ($values['image'] != '') { ?>
+															<img itemprop="image" src="./uploads/images/announcement/<?php echo $values['image'] ?>" alt="<?php echo $values['subject'] ?>" style="width:100%">
+														<?php } ?>
+													</div>
+													<h6><i class="fa fa-clock-o"></i><?php echo date('jS M Y H:i:s', strtotime($values['time'])) ?></h6>
+													<p><?php echo $values['message'] ?></p>
+													<?php if ($values['link'] != '') { ?>
+														<p> <a href="<?php echo $values['link'] ?>">Click here</a> </p>
+													<?php } ?>
+													<div class="posted-by">
+														<p>Thanks,</p>
+														<h6>John Doe, Principal</h6>
+													</div>
 											</div>
-										</div>
-										<div class="announcement-item">
-											<h5>Guest lecture on fine arts by Smith</h5>
-											<h6><i class="fa fa-clock-o"></i>06-24-2017, 13:34</h6>
-											<p>Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s.</p>
-											<div class="posted-by">
-												<p>Thanks,</p>
-												<h6>John Doe, Principal</h6>
-											</div>
-										</div>
-									</div>
-									<div class="tab-pane" id="2">
-										<div class="announcement-item">
-											<h5>2</h5>
-										</div>
-									</div>
-									<div class="tab-pane" id="3">
-										<div class="announcement-item">
-											<h5>3</h5>
-										</div>
-									</div>
-								</div>
-							</div>
-						</div>
-					</div>
+										<?php	}
+										?>
 
-					<!-- <div class="col-sm-4">
-						<div>
-							<div class="my-msg dash-item">
-								<h6 class="item-title"><i class="fa fa-calendar"></i>TODAY'S TASK</h6>
-								<div class="inner-item">
-									<div class="timetable-item">
-										<div class="col-xs-3 clear-padding">
-											<p><span class="time">10 AM</span></p>
-										</div>
-										<div class="col-xs-9">
-											<p class="title">Teacher Meeting</p>
-											<p class="sent-by"><i class="fa fa-map-marker"></i> ROOM NO - 601</p>
-										</div>
-										<div class="clearfix"></div>
-									</div>
-									<div class="timetable-item">
-										<div class="col-xs-3 clear-padding">
-											<p><span class="time">11 AM</span></p>
-										</div>
-										<div class="col-xs-9">
-											<p class="title">Campus Tour</p>
-											<p class="sent-by"><i class="fa fa-map-marker"></i> CAMPUS</p>
 
-										</div>
-										<div class="clearfix"></div>
-									</div>
-									<div class="timetable-item">
-										<div class="col-xs-3 clear-padding">
-											<p><span class="time">12 PM</span></p>
-										</div>
-										<div class="col-xs-9">
-											<p class="title">Parent Meeting</p>
-											<p class="sent-by"><i class="fa fa-map-marker"></i> ROOM NO - 601</p>
-
-										</div>
-										<div class="clearfix"></div>
-									</div>
-									<div class="timetable-item">
-										<div class="col-xs-3 clear-padding">
-											<p><span class="time">01 PM</span></p>
-										</div>
-										<div class="col-xs-9">
-											<p class="title">Guest Lecture</p>
-											<p class="sent-by"><i class="fa fa-map-marker"></i> ROOM NO - 601</p>
-
-										</div>
-										<div class="clearfix"></div>
-									</div>
-									<div class="timetable-item">
-										<div class="col-xs-3 clear-padding">
-											<p><span class="time">02 PM</span></p>
-										</div>
-										<div class="col-xs-9">
-											<p class="title">Teacher Meeting</p>
-											<p class="sent-by"><i class="fa fa-map-marker"></i> ROOM NO - 601</p>
-										</div>
-										<div class="clearfix"></div>
-									</div>
-
-								</div>
-							</div>
-						</div>
-					</div> -->
-				</div>
-			</div>
-			<div class="row">
-				<div class="col-lg-12 clear-padding-xs">
-					<!-- <div class="col-sm-8">
-						<div>
-							<div class="my-msg dash-item">
-								<h6 class="item-title"><i class="fa fa-bar-chart"></i>TODAY'S STUDENT ATTENDENCE</h6>
-								<div class="inner-item">
-									<div class="summary-chart">
-										<canvas id="studentAttendenceBar" height="100px"></canvas>
-										<div class="chart-legends">
-											<span class="red">ABSENT</span>
-											<span class="orange">ON LEAVE</span>
-											<span class="green">PRESENT</span>
-										</div>
-										<div class="chart-title">
-											<h6 class="bottom-title">STUDENT ATTENDENCE BAR</h6>
-										</div>
-									</div>
-								</div>
-							</div>
-						</div>
-					</div> -->
-					<!-- <div class="col-md-4">
-						<div>
-							<div class="my-msg dash-item">
-								<h6 class="item-title"><i class="fa fa-pie-chart"></i>TEACHER ATTENDENCE</h6>
-								<div class="chart-item">
-									<canvas id="studentPie" height=250px></canvas>
-									<div class="chart-legends">
-										<span class="red">ABSENT</span>
-										<span class="orange">PRESENT</span>
-										<span class="green">LEAVE</span>
-									</div>
-								</div>
-							</div>
-						</div>
-					</div> -->
-				</div>
-			</div>
-			<!-- <div class="row">
-				<div class="col-lg-12 clear-padding-xs">
-					<div class="col-md-12">
-						<div class="my-msg dash-item">
-							<h6 class="item-title"><i class="fa fa-bullhorn"></i>ANNOUNCEMENTS</h6>
-							<div class="inner-item dashboard-tabs">
-								<ul class="nav nav-tabs">
-									<li class="active">
-										<a href="#1" data-toggle="tab"><i class="fa fa-graduation-cap"></i><span>ACADEMICS</span></a>
-									</li>
-									<li>
-										<a href="#2" data-toggle="tab"><i class="fa fa-users"></i><span>ADMISSIONS</span></a>
-									</li>
-									<li>
-										<a href="#3" data-toggle="tab"><i class="fa fa-trophy"></i><span>SPORTS</span></a>
-									</li>
-								</ul>
-								<div class="tab-content">
-									<div class="tab-pane active" id="1">
-										<div class="announcement-item">
-											<h5>Guest lecture on fine arts by Smith.<span class="new">New</span></h5>
-											<h6><i class="fa fa-clock-o"></i>06-24-2017, 13:34</h6>
-											<p>Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.</p>
-											<div class="posted-by">
-												<p>Thanks,</p>
-												<h6>John Doe, Principal</h6>
-											</div>
-										</div>
-										<div class="announcement-item">
-											<h5>Guest lecture on fine arts by Smith</h5>
-											<h6><i class="fa fa-clock-o"></i>06-24-2017, 13:34</h6>
-											<p>Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s.</p>
-											<div class="posted-by">
-												<p>Thanks,</p>
-												<h6>John Doe, Principal</h6>
-											</div>
-										</div>
 									</div>
 									<div class="tab-pane" id="2">
 										<div class="announcement-item">
@@ -320,7 +150,7 @@
 						</div>
 					</div>
 				</div>
-			</div> -->
+			</div>
 		</div>
 		<div class="menu-togggle-btn">
 			<a href="#menu-toggle" id="menu-toggle"><i class="fa fa-bars"></i></a>

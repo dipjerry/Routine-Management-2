@@ -118,6 +118,23 @@ class routine
         $html .= '</select>';
         return $html;
     }
+    function get_teacher_subject($subject)
+    {
+        $this->query = "
+				SELECT teacher_code , name FROM teacher_list where subject = '" . $subject . "'   
+				ORDER BY name ASC
+				";
+        $result = $this->get_result();
+        $html = '
+		<select name="teacher" id="teacher_select" required>
+			<option value="" readonly>Select teacher</option>
+		';
+        foreach ($result as $values) {
+            $html .= '<option value="' . $values['teacher_code'] . '">' . $values['name'] . '</option>';
+        }
+        $html .= '</select>';
+        return $html;
+    }
     function get_course_name($id)
     {
         $this->query = "
@@ -179,6 +196,15 @@ class routine
     function e($data)
     {
         $data = strip_tags(html_entity_decode($data));
+        $data = preg_replace('/[^\p{L}\p{N}]/u', '', $data);
+        $data = stripslashes($data);
+        $data = htmlspecialchars($data);
+        $data = str_replace(' ', '_', $data);
+        return $data;
+    }
+    function cleanTable($data)
+    {
+        $data = strip_tags(html_entity_decode($data));
         $data = preg_replace('/[^\p{L}\p{N}]/u', ' ', $data);
         $data = stripslashes($data);
         $data = htmlspecialchars($data);
@@ -235,4 +261,163 @@ class routine
         $html .= '</select>';
         return $html;
     }
+    function days()
+    {
+        // var_dump($limit);
+        $days = array(
+            '1' => 'monday',
+            '2' => 'tuesday',
+            '3' => 'wednesday',
+            '4' => 'thursday',
+            '5' => 'friday',
+            '6' => 'saturday',
+        );
+        $html = '
+		<select name="days" id="day_list" required>
+			<option value="">Select weekday</option>
+		';
+        foreach ($days as $key => $values) {
+
+            $html .= '<option value="' . $values . '">' . $values . '</option>';
+        }
+        $html .= '</select>';
+        return $html;
+    }
+
+
+
+    function free_slot_table($day, $table)
+    {
+        $this->query = "select *  from $table where day='" . $day . "'";
+        $result = $this->get_result();
+        $html = '
+		<select name="free_slot" id="free_slot" required>
+			<option value="">Select slot</option>
+		';
+        foreach ($result as $values) {
+            for ($x = 1; $x <= 6; $x++) {
+                if ($values["period" . $x] == NULL) {
+                    $html .= '<option value="' . "period" . $x . '">' . "period" . $x . '</option>';
+                }
+            }
+        }
+
+        $html .= '</select>';
+        return $html;
+    }
+    // function free_teacher($day, $table)
+    // {
+    //     $this->query = "select *  from $table where day='" . $day . "'";
+    //     $result = $this->get_result();
+    //     $html = '
+    // 	<select name="free_slot" id="free_slot" required>
+    // 		<option value="">Select slot</option>
+    // 	';
+    //     foreach ($result as $values) {
+    //         for ($x = 1; $x <= 6; $x++) {
+    //             if ($values["period" . $x] == NULL) {
+    //                 $html .= '<option value="' . "period" . $x . '">' . "period" . $x . '</option>';
+    //             }
+    //         }
+    //     }
+
+    //     $html .= '</select>';
+    //     return $html;
+    // }
+    function free_teacher($day, $table)
+    {
+        $this->query = "select *  from $table where day='" . $day . "'";
+        $result = $this->get_result();
+        $teacher = array();
+        if (!$result) {
+            return;
+        }
+        foreach ($result as $values) {
+            for ($x = 1; $x <= 6; $x++) {
+                if ($values["period" . $x] == NULL) {
+                    array_push($teacher, "period" . $x);
+                }
+            }
+        }
+        return $teacher;
+    }
+    function free_course_slot($day, $table)
+    {
+        $this->query = "select *  from $table where day='" . $day . "'";
+        $result = $this->get_result();
+        $course = array();
+        if (!$result) {
+            return;
+        }
+        foreach ($result as $values) {
+            for ($x = 1; $x <= 6; $x++) {
+                if ($values["period" . $x] == NULL) {
+                    array_push($course, "period" . $x);
+                }
+            }
+        }
+        return $course;
+    }
+    function free_slot($day, $course, $branch, $semester, $teacher)
+    {
+        $generatedTable = $this->cleanTable($course . $branch . $semester);
+        // var_dump($generatedTable);
+        $course = $this->free_course_slot($day, $generatedTable);
+        $teacher =  $this->free_teacher($day, $teacher);
+        if ($course == '' or $teacher == '') {
+            return;
+        }
+        $freeSlot = array_intersect($course, $teacher);
+        $html = '
+		<select name="free_slot" id="free_slot" required>
+			<option value="">Select slot</option>
+		';
+        // var_dump($freeSlot);
+        for ($i = 1; $i <= count($freeSlot); $i++) {
+
+            $html .= '<option value="' . $freeSlot[$i] . '">' . $freeSlot[$i] . '</option>';
+        }
+        $html .= '</select>';
+        return $html;
+    }
+
+
+
+
+    function no_timetable_subject()
+    {
+        $this->query = "select *  from subject where status='no' ORDER BY name ASC";
+        $result = $this->get_result();
+        $html = '
+		<select name="subject" id="no_timetable_subject" required>
+			<option value="">Select subject</option>
+		';
+        foreach ($result as $values) {
+            $html .= '<option value="' . $values['subject_code'] . '">' . $values['name'] . '</option>';
+        }
+        $html .= '</select>';
+        return $html;
+    }
+
+    function get_subject()
+    {
+        $this->query = "select *  from subject ORDER BY name ASC";
+        $result = $this->get_result();
+        $html = '
+		<select name="subject" id="no_timetable_subject" required>
+			<option value="">Select subject</option>
+		';
+        foreach ($result as $values) {
+            $html .= '<option value="' . $values['subject_code'] . '">' . $values['name'] . '</option>';
+        }
+        $html .= '</select>';
+        return $html;
+    }
+
+
+
+    // while ($row = $res->fetch()) {
+
+    // }
+    // echo $free_slot;
 }

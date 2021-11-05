@@ -82,4 +82,14 @@ if (isset($_POST["action"])) {
         );
         echo json_encode($output);
     }
+    if ($_POST["action"] == 'delete') {
+        $id = $_POST["id"];
+        $object->query = "SELECT * FROM classroom WHERE id = '$id'";
+        $result = $object->get_result();
+        foreach ($result as $row) {
+            $resultset[] = $row;
+        }
+
+        echo '<div class="alert alert-success">Product Deleted</div>';
+    }
 }

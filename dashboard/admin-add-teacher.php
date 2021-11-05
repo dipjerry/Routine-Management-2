@@ -12,6 +12,7 @@
 					<div class="section-divider"></div>
 				</div>
 			</div>
+			<span id="message"></span>
 			<div class="row">
 				<div class="col-lg-12 clear-padding-xs">
 					<div class="col-md-12">
@@ -37,6 +38,10 @@
 											<input type="text" name="alias" placeholder="alias" />
 										</div>
 										<div class="clearfix"></div>
+										<div class="col-sm-3">
+											<label><i class="fa fa-book"></i></i>SUBJECT</label>
+											<?php echo $object->no_timetable_subject() ?>
+										</div>
 										<div class="col-sm-3">
 											<label><i class="fa fa-user-circle-o"></i>TEACHER CODE</label>
 											<input type="text" name="tcode" required data-parsley-trigger="keyup" data-parsley-type="alphanum" placeholder="teacher code" />
@@ -89,7 +94,6 @@
 <script>
 	$(document).ready(function() {
 		$('#add_teacher_form').on('submit', function(event) {
-			alert("hello");
 			event.preventDefault();
 			if ($('#add_teacher_form').parsley().isValid()) {
 				$.ajax({
@@ -111,7 +115,7 @@
 						} else {
 							$('#productModal').modal('hide');
 							$('#message').html(data.success);
-							dataTable.ajax.reload();
+							// dataTable.ajax.reload();
 							setTimeout(function() {
 								$('#message').html('');
 							}, 5000);

@@ -10,75 +10,79 @@
 		<div class="container-fluid">
 			<div class="row">
 				<div class="col-lg-12 clear-padding-xs">
-					<h5 class="page-title"><i class="fa fa-clock-o"></i>TIME SLOTS</h5>
+					<h5 class="page-title"><i class="fa fa-clock-o"></i>CREATE TIMETABLE</h5>
 					<div class="section-divider"></div>
 				</div>
 			</div>
+			<span id="message"></span>
+			<span id="form_message"></span>
 			<div class="row">
 				<div class="col-lg-12 clear-padding-xs">
 					<div class="col-sm-12">
 						<div class="dash-item first-dash-item">
-							<h6 class="item-title"><i class="fa fa-plus-circle"></i>ADD SLOT</h6>
+							<h6 class="item-title"><i class="fa fa-plus-circle"></i>SELECT COURSE</h6>
 							<div class="inner-item">
 								<div class="dash-form">
 									<div class="col-sm-3">
-										<label class="clear-top-margin"><i class="fa fa-calendar"></i>DAY</label>
-										<select>
-											<option>-- Select --</option>
-											<option>Monday</option>
-											<option>Tuesday</option>
-										</select>
+										<label><i class="fa fa-book"></i>COURSE</label>
+										<?php echo $object->get_course() ?>
 									</div>
 									<div class="col-sm-3">
-										<label class="clear-top-margin"><i class="fa fa-clock-o"></i>SLOT</label>
-										<select>
-											<option>-- Select --</option>
-											<option>09-10 AM</option>
-											<option>10-11 PM</option>
-										</select>
+										<label><i class="fa fa-book"></i>BRANCH</label>
+										<div id="branch_container">
+											<select name="branch" id="branch_select" disabled required>
+												<option value="" readonly>Select branch</option>
+											</select>
+										</div>
 									</div>
 									<div class="col-sm-3">
-										<label class="clear-top-margin"><i class="fa fa-book"></i>CLASS</label>
-										<select>
-											<option>-- Select --</option>
-											<option>STD 5</option>
-											<option>STD 6</option>
-										</select>
+										<label><i class="fa fa-book"></i>SEMESTER</label>
+										<div id="semester_container">
+											<select name="branch" id="branch_select" disabled required>
+												<option value="" readonly>Select semester</option>
+											</select>
+										</div>
 									</div>
+								</div>
+								<div class="clearfix"></div>
+							</div>
+							<div class="clearfix"></div>
+						</div>
+						<div class="dash-item">
+							<h6 class="item-title"><i class="fa fa-plus-circle"></i>SLOT SELECT</h6>
+							<div class="inner-item">
+								<div class="dash-form">
 									<div class="col-sm-3">
-										<label class="clear-top-margin"><i class="fa fa-users"></i>SECTION</label>
-										<select>
-											<option>-- Select --</option>
-											<option>STD 5</option>
-											<option>STD 6</option>
-										</select>
+										<label><i class="fa fa-calendar"></i>DAY</label>
+										<?php echo $object->days() ?>
 									</div>
 									<div class="col-sm-3">
 										<label><i class="fa fa-code"></i>SUBJECT</label>
-										<select>
-											<option>-- Select --</option>
-											<option>PHY101</option>
-											<option>MTH101</option>
-										</select>
+										<?php echo $object->no_timetable_subject() ?>
 									</div>
 									<div class="col-sm-3">
 										<label><i class="fa fa-user"></i>TEACHER</label>
-										<select>
-											<option>-- Select --</option>
-											<option>John Doe</option>
-											<option>Lennore Doe</option>
-										</select>
+										<div id="teacher_container">
+											<select name="teacher" id="teacher_select" disabled required>
+												<option value="" readonly>Select Teacher</option>
+											</select>
+										</div>
+
 									</div>
+
 									<div class="col-sm-3">
-										<label><i class="fa fa-home"></i>CLASS ROOM</label>
-										<select>
-											<option>-- Select --</option>
-											<option>101</option>
-											<option>103</option>
-										</select>
+										<label><i class="fa fa-clock-o"></i>SLOT</label>
+										<div id="slot_container">
+											<select name="slot" id="slot_select" disabled required>
+												<option value="" readonly>Select Slot</option>
+											</select>
+										</div>
 									</div>
+
+									<div class="clearfix"></div>
 									<div class="col-sm-12">
-										<a href="#"><i class="fa fa-paper-plane"></i> CREATE</a>
+										<input type="hidden" name="action" value="Add" />
+										<button type="submit" id="register_button" class="btn btn-success btn-user p-3 m-3"><i class="fa fa-paper-plane"></i>Save</button>
 									</div>
 								</div>
 								<div class="clearfix"></div>
@@ -200,3 +204,187 @@
 </div>
 
 <?php include('includes/footer.php') ?>
+
+<script>
+	$(document).ready(function() {
+		var dataTable = $('#classroomDetailedTable').DataTable({
+			"processing": true,
+			"serverSide": true,
+			"order": [],
+			"ajax": {
+				url: "./controller/allot_classroom_action.php",
+				type: "POST",
+				data: {
+					action: 'fetch'
+				}
+			},
+			"columnDefs": [{
+				"targets": [3],
+				"orderable": true,
+			}, ],
+		});
+		$('#AllotRoomForm').on('submit', function(event) {
+			event.preventDefault();
+			if ($('#AllotRoomForm').parsley().isValid()) {
+				$.ajax({
+					url: "./controller/allot_classroom_action.php",
+					method: "POST",
+					data: new FormData(this),
+					dataType: 'json',
+					contentType: false,
+					processData: false,
+					beforeSend: function() {
+						$('#submit_button').attr('disabled', 'disabled');
+						$('#submit_button').val('wait...');
+					},
+					success: function(data) {
+						$('#submit_button').attr('disabled', false);
+						if (data.error != '') {
+							$('#form_message').html(data.error);
+							$('#submit_button').val('Add');
+						} else {
+							$('#productModal').modal('hide');
+							$('#message').html(data.success);
+							dataTable.ajax.reload();
+							setTimeout(function() {
+								$('#message').html('');
+							}, 5000);
+						}
+					}
+				})
+			}
+		});
+		slot = `<select name="slot" id="slot_select" disabled required> 
+			<option value = "" readonly > Select Slot <select /option> 
+			</select>`
+
+		$(document).on('change', '#course_select', function() {
+			let course = $(this).val();
+			$.ajax({
+				url: "./controller/allot_classroom_action.php",
+				data: {
+					course: course,
+					action: 'dropDownFill'
+				},
+				type: 'POST',
+				success: function(response) {
+					const dropDown = JSON.parse(response);
+					$("#semester_container").html(dropDown.semester);
+					$("#branch_container").html(dropDown.branch);
+					$("#slot_container").html(slot);
+				}
+			});
+		});
+		$(document).on('change', '#no_timetable_subject', function() {
+			let subject = $(this).val();
+			$.ajax({
+				url: "./controller/custom.php",
+				data: {
+					subject: subject,
+					action: 'subjectTeacher'
+				},
+				type: 'POST',
+				success: function(response) {
+					const dropDown = JSON.parse(response);
+					$("#teacher_container").html(dropDown.teacher);
+
+				}
+			});
+		});
+
+		function slotChange() {
+			const teacher = $('#teacher_select').val();
+			const days = $('#day_list').val();
+			const course = $('#course_select').val();
+			const branch = $('#branch_select').val();
+			const semester = $('#semester_list').val();
+			// alert(teacher);
+			// alert(days);
+			// alert(course);
+			// alert(branch);
+			// alert(semester);
+			$.ajax({
+				url: "./controller/custom.php",
+				data: {
+					day: days,
+					teacher: teacher,
+					course: course,
+					branch: branch,
+					semester: semester,
+					action: 'freeSlot'
+				},
+				type: 'POST',
+				success: function(response) {
+
+					const dropDown = JSON.parse(response);
+					if (dropDown.error != '') {
+						$('#form_message').html(dropDown.error);
+						setTimeout(function() {
+							$('#form_message').html('');
+						}, 5000);
+
+					} else {
+						$("#slot_container").html(dropDown.slot);
+					}
+
+
+
+				}
+			});
+		}
+
+		$(document).on('change', '#teacher_select', function() {
+			const teacher = $(this).val();
+			const days = $('#day_list').val();
+			const course = $('#course_select').val();
+			const branch = $('#branch_select').val();
+			const semester = $('#semester_list').val();
+			if (course == '') {
+				$('#form_message').html('Select Course');
+				$('#course_select').focus();
+				return;
+			};
+			if (branch == '') {
+				$('#form_message').html('Select Branch');
+				$('#branch_select').focus();
+				return;
+			}
+			if (semester == '') {
+				$('#form_message').html('Select semester  ');
+				$('#semester_list').focus();
+				return;
+			}
+			if (days == '') {
+				$('#form_message').html('Select semester  ');
+				$('#day_list').focus();
+				return;
+			}
+			slotChange();
+		});
+
+		$(document).on('click', '.delete_button', function() {
+			var id = $(this).data('id');
+			$('#delete_hidden_id').val(id);
+			$('#deleteDetailModal').modal('show');
+		});
+		$(document).on('click', '#delete', function() {
+			var id = $('#delete_hidden_id').val();
+			$.ajax({
+				url: "./controller/allot_classroom_action.php",
+				method: "POST",
+				data: {
+					id: id,
+					action: 'delete'
+				},
+				success: function(data) {
+					$('#message').html(data);
+					dataTable.ajax.reload();
+					setTimeout(function() {
+						$('#message').html('');
+					}, 5000);
+				}
+			})
+
+		});
+	});
+</script>

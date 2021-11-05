@@ -88,14 +88,15 @@ if (isset($_POST["action"])) {
                 ':code'              =>    $tcode,
                 ':name'              =>    $object->clean_input($tname),
                 ':alias'             =>    $object->e($_POST["alias"]),
+                ':subject'             =>    $object->e($_POST["subject"]),
                 ':gender'            =>    $object->clean_input($_POST["gender"]),
                 ':phone'             =>    $_POST["phone"],
                 ':email'             =>    $object->clean_input($_POST["email"]),
                 ':display_image'     =>    $display_image,
             );
             $object->query = "
-			INSERT INTO teacher_list (teacher_code, name ,alias, gender, phone,email, display_image)
-			VALUES (:code, :name, :alias, :gender, :phone, :email , :display_image)
+			INSERT INTO teacher_list (teacher_code, name ,alias,subject, gender, phone,email, display_image)
+			VALUES (:code, :name, :alias, :subject , :gender, :phone, :email , :display_image)
 			";
             $object->execute($data);
             $object->query =  "CREATE TABLE " . $tcode . " (
@@ -122,6 +123,25 @@ if (isset($_POST["action"])) {
             'success'    =>    $success
         );
         echo json_encode($output);
+    }
+    if ($_POST["action"] == 'delete') {
+        $id = $_POST["id"];
+        $object->query = "SELECT display_image , teacher_code FROM teacher_list WHERE id = '$id'";
+        $result = $object->get_result();
+        foreach ($result as $row) {
+            $resultset[] = $row;
+        }
+        $object->query = "
+		DELETE FROM teacher_list 
+		WHERE id = '" . $id . "'
+		";
+        $object->execute();
+        if (!empty($resultset)) {
+            unlink('../uploads/images/faculty/' . $resultset[0]['display_image']);
+            $object->query = "DROP TABLE " . $resultset[0]['teacher_code'];
+            $object->execute();
+        }
+        echo '<div class="alert alert-success">teacher Deleted</div>';
     }
 }
 function upload_image()

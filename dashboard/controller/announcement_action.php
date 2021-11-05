@@ -145,47 +145,23 @@ if (isset($_POST["action"])) {
         );
         echo json_encode($output);
     }
-    if ($_POST["action"] == 'change_status') {
-        $data = array(
-            ':product_status'        =>    $_POST['next_status']
-        );
-        $object->query = "
-		UPDATE product_table 
-		SET product_status = :product_status 
-		WHERE product_id = '" . $_POST["id"] . "'
-		";
-        $object->execute($data);
-        echo '<div class="alert alert-success">Product Status change to ' . $_POST['next_status'] . '</div>';
-    }
+
     if ($_POST["action"] == 'delete') {
-        $product_id = $_POST["id"];
-        $object->query = "SELECT * FROM product_table WHERE product_id = '$product_id'";
+        $id = $_POST["id"];
+        $object->query = "SELECT * FROM announcement WHERE id = '$id'";
         $result = $object->get_result();
         foreach ($result as $row) {
             $resultset[] = $row;
         }
         $object->query = "
-		DELETE FROM product_table 
-		WHERE product_id = '" . $_POST["id"] . "'
+		DELETE FROM announcement 
+		WHERE id = '" . $id . "'
 		";
         $object->execute();
         if (!empty($resultset)) {
-            unlink($resultset[0]['photo']);
+            unlink('../uploads/images/announcement/' . $resultset[0]['image']);
         }
         echo '<div class="alert alert-success">Product Deleted</div>';
-    }
-    if ($_POST["action"] == 'subCategoryList') {
-        $main_query = "SELECT sub_category_name FROM product_sub_category_table 
-        WHERE category_status = 'Enable' AND category = '" . $_POST["cat"] . "'  
-		ORDER BY sub_category_name ASC";
-        $object->query = $main_query;
-        $object->execute();
-        $result = $object->get_result();
-        echo '<option value="">Select Sub Category</option>';
-        foreach ($result as $row) {
-            echo "<option value='" . $row["sub_category_name"] . "'>" . $row["sub_category_name"] . "</option>";
-        }
-        // echo json_encode($output);
     }
 }
 function upload_image()
@@ -198,17 +174,3 @@ function upload_image()
         return $new_name;
     }
 }
-// function make_avatar($character)
-// {
-// 	$path = "/images/" . time() . ".png";
-// 	$image = imagecreate(200, 200);
-// 	$red = rand(0, 255);
-// 	$green = rand(0, 255);
-// 	$blue = rand(0, 255);
-// 	imagecolorallocate($image, 230, 230, 230);
-// 	$textcolor = imagecolorallocate($image, $red, $green, $blue);
-// 	imagettftext($image, 100, 0, 55, 150, $textcolor, 'font/arial.ttf', $character);
-// 	imagepng($image, $path);
-// 	imagedestroy($image);
-// 	return $path;
-// }

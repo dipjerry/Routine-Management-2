@@ -13,6 +13,7 @@
 					<div class="section-divider"></div>
 				</div>
 			</div>
+			<span id="message"></span>
 			<div class="row">
 				<div class="col-lg-12 clear-padding-xs">
 					<div class="col-lg-12">
