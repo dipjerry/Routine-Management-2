@@ -69,12 +69,15 @@ if (isset($_POST["action"])) {
         $object->query = "SELECT * FROM teacher_list WHERE email = :teacher_email OR alias = :teacher_alias or teacher_code =:teacher_code ";
         $object->execute($data);
         $tname = '';
+
         $tcode = $object->clean_input($_POST["tcode"]);
+
         if ($_POST["mname"] != '') {
             $tname = $_POST["fname"] . ' ' . $_POST["mname"] . ' ' . $_POST["lname"];
         } else {
             $tname = $_POST["fname"] . ' ' . $_POST["lname"];
         }
+
         if ($object->row_count() > 0) {
             $error = '<div class="alert alert-danger">Email or Alias Already Exists</div>';
         } else {

@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Oct 31, 2021 at 07:08 PM
+-- Generation Time: Nov 05, 2021 at 08:25 AM
 -- Server version: 10.4.21-MariaDB
 -- PHP Version: 7.3.30
 
@@ -53,6 +53,52 @@ CREATE TABLE `branch` (
 -- --------------------------------------------------------
 
 --
+-- Table structure for table `bt6500cse12342`
+--
+
+CREATE TABLE `bt6500cse12342` (
+  `day` varchar(10) NOT NULL,
+  `period1` varchar(30) DEFAULT NULL,
+  `period2` varchar(30) DEFAULT NULL,
+  `period3` varchar(30) DEFAULT NULL,
+  `period4` varchar(30) DEFAULT NULL,
+  `period5` varchar(30) DEFAULT NULL,
+  `period6` varchar(30) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `classroom`
+--
+
+CREATE TABLE `classroom` (
+  `id` int(11) NOT NULL,
+  `classroom_code` varchar(12) NOT NULL,
+  `description` varchar(300) NOT NULL,
+  `status` enum('free','alloted') NOT NULL,
+  `added_on` timestamp NOT NULL DEFAULT current_timestamp()
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `classroom_allotment`
+--
+
+CREATE TABLE `classroom_allotment` (
+  `id` int(11) NOT NULL,
+  `course_code` varchar(15) NOT NULL,
+  `branch_code` varchar(15) NOT NULL,
+  `semester` int(11) NOT NULL,
+  `classroom` varchar(15) NOT NULL,
+  `status` enum('generated','notgenerated') NOT NULL,
+  `added_on` timestamp NOT NULL DEFAULT current_timestamp()
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+-- --------------------------------------------------------
+
+--
 -- Table structure for table `course`
 --
 
@@ -84,6 +130,25 @@ CREATE TABLE `dp1234` (
 -- --------------------------------------------------------
 
 --
+-- Table structure for table `subject`
+--
+
+CREATE TABLE `subject` (
+  `id` int(11) NOT NULL,
+  `name` varchar(30) NOT NULL,
+  `subject_code` varchar(15) NOT NULL,
+  `course` varchar(20) NOT NULL,
+  `semester` int(11) NOT NULL,
+  `branch` varchar(20) NOT NULL,
+  `teacher` varchar(20) NOT NULL,
+  `description` varchar(300) NOT NULL,
+  `status` enum('yes','no') NOT NULL,
+  `added_on` timestamp NOT NULL DEFAULT current_timestamp()
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+-- --------------------------------------------------------
+
+--
 -- Table structure for table `teacher_list`
 --
 
@@ -92,6 +157,7 @@ CREATE TABLE `teacher_list` (
   `teacher_code` varchar(10) NOT NULL,
   `name` varchar(30) NOT NULL,
   `alias` varchar(3) NOT NULL,
+  `subject` varchar(30) NOT NULL,
   `gender` enum('male','female') NOT NULL,
   `phone` bigint(20) NOT NULL,
   `email` varchar(30) NOT NULL,
@@ -132,6 +198,24 @@ ALTER TABLE `branch`
   ADD PRIMARY KEY (`id`);
 
 --
+-- Indexes for table `bt6500cse12342`
+--
+ALTER TABLE `bt6500cse12342`
+  ADD PRIMARY KEY (`day`);
+
+--
+-- Indexes for table `classroom`
+--
+ALTER TABLE `classroom`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indexes for table `classroom_allotment`
+--
+ALTER TABLE `classroom_allotment`
+  ADD PRIMARY KEY (`id`);
+
+--
 -- Indexes for table `course`
 --
 ALTER TABLE `course`
@@ -142,6 +226,12 @@ ALTER TABLE `course`
 --
 ALTER TABLE `dp1234`
   ADD PRIMARY KEY (`day`);
+
+--
+-- Indexes for table `subject`
+--
+ALTER TABLE `subject`
+  ADD PRIMARY KEY (`id`);
 
 --
 -- Indexes for table `teacher_list`
@@ -173,9 +263,27 @@ ALTER TABLE `branch`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
+-- AUTO_INCREMENT for table `classroom`
+--
+ALTER TABLE `classroom`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT for table `classroom_allotment`
+--
+ALTER TABLE `classroom_allotment`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+
+--
 -- AUTO_INCREMENT for table `course`
 --
 ALTER TABLE `course`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT for table `subject`
+--
+ALTER TABLE `subject`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 
 --

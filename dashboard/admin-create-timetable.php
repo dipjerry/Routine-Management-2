@@ -19,76 +19,78 @@
 			<div class="row">
 				<div class="col-lg-12 clear-padding-xs">
 					<div class="col-sm-12">
-						<div class="dash-item first-dash-item">
-							<h6 class="item-title"><i class="fa fa-plus-circle"></i>SELECT COURSE</h6>
-							<div class="inner-item">
-								<div class="dash-form">
-									<div class="col-sm-3">
-										<label><i class="fa fa-book"></i>COURSE</label>
-										<?php echo $object->get_course() ?>
-									</div>
-									<div class="col-sm-3">
-										<label><i class="fa fa-book"></i>BRANCH</label>
-										<div id="branch_container">
-											<select name="branch" id="branch_select" disabled required>
-												<option value="" readonly>Select branch</option>
-											</select>
+						<form action="" method="post" id="timetableForm">
+							<div class="dash-item first-dash-item">
+								<h6 class="item-title"><i class="fa fa-plus-circle"></i>SELECT COURSE</h6>
+								<div class="inner-item">
+									<div class="dash-form">
+										<div class="col-sm-3">
+											<label><i class="fa fa-book"></i>COURSE</label>
+											<?php echo $object->get_course() ?>
+										</div>
+										<div class="col-sm-3">
+											<label><i class="fa fa-book"></i>BRANCH</label>
+											<div id="branch_container">
+												<select name="branch" id="branch_select" disabled required>
+													<option value="" readonly>Select branch</option>
+												</select>
+											</div>
+										</div>
+										<div class="col-sm-3">
+											<label><i class="fa fa-book"></i>SEMESTER</label>
+											<div id="semester_container">
+												<select name="branch" id="branch_select" disabled required>
+													<option value="" readonly>Select semester</option>
+												</select>
+											</div>
 										</div>
 									</div>
-									<div class="col-sm-3">
-										<label><i class="fa fa-book"></i>SEMESTER</label>
-										<div id="semester_container">
-											<select name="branch" id="branch_select" disabled required>
-												<option value="" readonly>Select semester</option>
-											</select>
-										</div>
-									</div>
-								</div>
-								<div class="clearfix"></div>
-							</div>
-							<div class="clearfix"></div>
-						</div>
-						<div class="dash-item">
-							<h6 class="item-title"><i class="fa fa-plus-circle"></i>SLOT SELECT</h6>
-							<div class="inner-item">
-								<div class="dash-form">
-									<div class="col-sm-3">
-										<label><i class="fa fa-calendar"></i>DAY</label>
-										<?php echo $object->days() ?>
-									</div>
-									<div class="col-sm-3">
-										<label><i class="fa fa-code"></i>SUBJECT</label>
-										<?php echo $object->no_timetable_subject() ?>
-									</div>
-									<div class="col-sm-3">
-										<label><i class="fa fa-user"></i>TEACHER</label>
-										<div id="teacher_container">
-											<select name="teacher" id="teacher_select" disabled required>
-												<option value="" readonly>Select Teacher</option>
-											</select>
-										</div>
-
-									</div>
-
-									<div class="col-sm-3">
-										<label><i class="fa fa-clock-o"></i>SLOT</label>
-										<div id="slot_container">
-											<select name="slot" id="slot_select" disabled required>
-												<option value="" readonly>Select Slot</option>
-											</select>
-										</div>
-									</div>
-
 									<div class="clearfix"></div>
-									<div class="col-sm-12">
-										<input type="hidden" name="action" value="Add" />
-										<button type="submit" id="register_button" class="btn btn-success btn-user p-3 m-3"><i class="fa fa-paper-plane"></i>Save</button>
-									</div>
 								</div>
 								<div class="clearfix"></div>
 							</div>
-							<div class="clearfix"></div>
-						</div>
+							<div class="dash-item">
+								<h6 class="item-title"><i class="fa fa-plus-circle"></i>SLOT SELECT</h6>
+								<div class="inner-item">
+									<div class="dash-form">
+										<div class="col-sm-3">
+											<label><i class="fa fa-calendar"></i>DAY</label>
+											<?php echo $object->days() ?>
+										</div>
+										<div class="col-sm-3">
+											<label><i class="fa fa-code"></i>SUBJECT</label>
+											<?php echo $object->no_timetable_subject() ?>
+										</div>
+										<div class="col-sm-3">
+											<label><i class="fa fa-user"></i>TEACHER</label>
+											<div id="teacher_container">
+												<select name="teacher" id="teacher_select" disabled required>
+													<option value="" readonly>Select Teacher</option>
+												</select>
+											</div>
+
+										</div>
+
+										<div class="col-sm-3">
+											<label><i class="fa fa-clock-o"></i>SLOT</label>
+											<div id="slot_container">
+												<select name="slot" id="slot_select" disabled required>
+													<option value="" readonly>Select Slot</option>
+												</select>
+											</div>
+										</div>
+
+										<div class="clearfix"></div>
+										<div class="col-sm-12">
+											<input type="hidden" name="action" value="Add" />
+											<button type="submit" id="register_button" class="btn btn-success btn-user p-3 m-3"><i class="fa fa-paper-plane"></i>Save</button>
+										</div>
+									</div>
+									<div class="clearfix"></div>
+								</div>
+								<div class="clearfix"></div>
+							</div>
+						</form>
 					</div>
 					<div class="col-sm-12">
 						<div class="dash-item">
@@ -191,15 +193,16 @@
 						<div class="clearfix"></div>
 					</div>
 					<div class="modal-footer">
-						<div class="table-action-box">
-							<a href="#" class="save"><i class="fa fa-check"></i>SAVE</a>
-							<a href="#" class="cancel" data-dismiss="modal"><i class="fa fa-ban"></i>CLOSE</a>
+						<div>
+							<input type="hidden" name="action" value="Add" />
+							<button type="submit" id="register_button" class="btn btn-success btn-user p-3 m-3">
+								<i class="fa fa-paper-plane"></i>Save
+							</button>
 						</div>
 					</div>
 				</div>
 			</div>
 		</div>
-
 	</div>
 </div>
 
@@ -223,11 +226,11 @@
 				"orderable": true,
 			}, ],
 		});
-		$('#AllotRoomForm').on('submit', function(event) {
+		$('#timetableForm').on('submit', function(event) {
 			event.preventDefault();
-			if ($('#AllotRoomForm').parsley().isValid()) {
+			if ($('#timetableForm').parsley().isValid()) {
 				$.ajax({
-					url: "./controller/allot_classroom_action.php",
+					url: "./controller/timetable_action.php",
 					method: "POST",
 					data: new FormData(this),
 					dataType: 'json',
@@ -254,6 +257,7 @@
 				})
 			}
 		});
+
 		slot = `<select name="slot" id="slot_select" disabled required> 
 			<option value = "" readonly > Select Slot <select /option> 
 			</select>`
@@ -298,11 +302,6 @@
 			const course = $('#course_select').val();
 			const branch = $('#branch_select').val();
 			const semester = $('#semester_list').val();
-			// alert(teacher);
-			// alert(days);
-			// alert(course);
-			// alert(branch);
-			// alert(semester);
 			$.ajax({
 				url: "./controller/custom.php",
 				data: {
