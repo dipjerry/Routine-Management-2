@@ -197,6 +197,37 @@ class routine
         $html .= '</select>';
         return $html;
     }
+    function get_subject_bycode($id)
+    {
+        $this->query = "
+        SELECT name FROM branch where subject_code = '" . $id . "'    
+        LIMIT 1
+        ";
+
+        // var_dump($this->query);
+        $result = $this->get_result();
+
+        foreach ($result as $value) {
+            return $value;
+        }
+    }
+    function get_teacher_bycode($id)
+    {
+        $this->query = "
+        SELECT branch , branch_code FROM branch where course = '" . $id . "'    
+        ORDER BY branch ASC
+        ";
+
+        // var_dump($this->query);
+        $result = $this->get_result();
+        $html = '<select name="branch" id="branch_select" required>';
+        $html .= '<option value="" readonly>Select branch</option>';
+        foreach ($result as $values) {
+            $html .= '<option value="' . $values['branch_code'] . '">' . $values['branch'] . '</option>';
+        }
+        $html .= '</select>';
+        return $html;
+    }
 
     function clean_input($string)
     {

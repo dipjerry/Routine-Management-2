@@ -57,23 +57,25 @@ if (isset($_POST["action"])) {
         $success = '';
         $error = '';
         $generatedTable = $object->cleanTable($_POST['course'] . $_POST['branch'] . $_POST['semester']);
+        // $period = $object->clean_input($object->get_subject_bycode($_POST['subject'])) . "<br>" . $object->clean_input($_POST['teacher']);
         $period = $object->clean_input($_POST['subject']) . "<br>" . $object->clean_input($_POST['teacher']);
+        $free_period = $object->clean_input($_POST['free_slot']);
+
         $data = array(
             ':period'              =>    $period,
             ':days'              =>    $object->clean_input($_POST['days']),
         );
         $object->query = "
-        UPDATE " . $generatedTable . " SET  " . $object->clean_input($_POST['free_slot']) . " =  :period  
+        UPDATE " . $generatedTable . " SET  " . $free_period . " =  :period  
         WHERE day= :days";
 
         $object->execute($data);
-        $period = $object->clean_input($_POST['free_slot']);
-        $data = array(
-            ':period'              =>    $object->clean_input($_POST['subject']) . "<br>" . $object->clean_input($_POST['teacher']),
-            ':days'              =>    $object->clean_input($_POST['days']),
-        );
+        // $data = array(
+        //     ':period'              =>    $period,
+        //     ':days'              =>    $object->clean_input($_POST['days']),
+        // );
         $object->query = "
-        UPDATE " . $object->clean_input($_POST['teacher']) . " SET  " . $period . " =  :period  
+        UPDATE " . $object->clean_input($_POST['teacher']) . " SET  " . $free_period . " =  :period  
         WHERE day= :days";
         $object->execute($data);
 
@@ -81,7 +83,7 @@ if (isset($_POST["action"])) {
         var_dump($class_room);
         $data = array(
             ':class_room'              =>    $class_room,
-            ':period'              =>    $period,
+            ':period'              =>    $free_period,
             ':days'              =>    $object->clean_input($_POST['days']),
             ':status'              =>    'available',
         );
