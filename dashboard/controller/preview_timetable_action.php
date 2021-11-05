@@ -123,24 +123,12 @@ if (isset($_POST["action"])) {
     }
     if ($_POST["action"] == 'display') {
         $generatedTable = $object->cleanTable($_POST['course'] . $_POST['branch'] . $_POST['semester']);
-
-        $object->query = "
-		SELECT * FROM $generatedTable
-		";
-        $result = $object->get_result();
         $html = '';
-        foreach ($result as $row) {
-            $html .= '<tr>';
-            $html .= '<td>' . $row['day'] . '</td>';
-            $html .= '<td>' . $row['period1'] . '</td>';
-            $html .= '<td>' . $row['period2'] . '</td>';
-            $html .= '<td>' . $row['period3'] . '</td>';
-            $html .= '<td>' . $row['period4'] . '</td>';
-            $html .= '<td>' . $row['period5'] . '</td>';
-            $html .= '<td>' . $row['period6'] . '</td>';
-            $html .= '</td>';
+
+        $days = array("monday", "tuesday", "wednesday", "thursday", "friday", "saturday");
+        foreach ($days as $day) {
+            $html .= $object->get_table_weekends_list($generatedTable,  $day);
         }
-        var_dump($html);
         echo $html;
     }
 }

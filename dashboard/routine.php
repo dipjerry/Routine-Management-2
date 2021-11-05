@@ -420,6 +420,27 @@ class routine
         $html .= '</select>';
         return $html;
     }
+    function get_table_weekends_list($table_name,  $day)
+    {
+        $this->query = "
+		SELECT * FROM $table_name where day = '" . $day . "'
+		";
+        $result = $this->get_result();
+        $table = '';
+        foreach ($result as $row) {
+            $table .= '<tr>';
+            $table .= '<td>' . $row['day'] . '</td>';
+            $table .= '<td>' . $row['period1'] . '</td>';
+            $table .= '<td>' . $row['period2'] . '</td>';
+            $table .= '<td>' . $row['period3'] . '</td>';
+            $table .= '<td>' . $row['period4'] . '</td>';
+            $table .= '<td>' . $row['period5'] . '</td>';
+            $table .= '<td>' . $row['period6'] . '</td>';
+            $table .= '</td>';
+        }
+        return $table;
+    }
+
 
 
 

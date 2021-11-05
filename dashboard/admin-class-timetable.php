@@ -22,32 +22,32 @@
 							<h6 class="item-title"><i class="fa fa-search"></i>MAKE SELECTION</h6>
 							<div class="inner-item dash-search-form">
 								<div class="dash-form">
-									<form action="" method="post" id="timetablePreview">
-										<div class="col-sm-3">
-											<label><i class="fa fa-book"></i>COURSE</label>
-											<?php echo $object->get_course() ?>
+									<!-- <form action="" method="post" id="timetablePreview"> -->
+									<div class="col-sm-3">
+										<label><i class="fa fa-book"></i>COURSE</label>
+										<?php echo $object->get_course() ?>
+									</div>
+									<div class="col-sm-3">
+										<label><i class="fa fa-book"></i>BRANCH</label>
+										<div id="branch_container">
+											<select name="branch" id="branch_select" disabled required>
+												<option value="" readonly>Select branch</option>
+											</select>
 										</div>
-										<div class="col-sm-3">
-											<label><i class="fa fa-book"></i>BRANCH</label>
-											<div id="branch_container">
-												<select name="branch" id="branch_select" disabled required>
-													<option value="" readonly>Select branch</option>
-												</select>
-											</div>
+									</div>
+									<div class="col-sm-3">
+										<label><i class="fa fa-book"></i>SEMESTER</label>
+										<div id="semester_container">
+											<select name="branch" id="branch_select" disabled required>
+												<option value="" readonly>Select semester</option>
+											</select>
 										</div>
-										<div class="col-sm-3">
-											<label><i class="fa fa-book"></i>SEMESTER</label>
-											<div id="semester_container">
-												<select name="branch" id="branch_select" disabled required>
-													<option value="" readonly>Select semester</option>
-												</select>
-											</div>
-										</div>
-										<div class="col-sm-4">
-											<input type="hidden" name="action" value="display">
-											<button type="button" class="submit-btn" id="preview-btn"><i class="fa fa-search"></i>SHOW</button>
-										</div>
-									</form>
+									</div>
+									<div class="col-sm-4">
+										<input type="hidden" name="action" value="display">
+										<button type="button" class="submit-btn" id="preview-btn"><i class="fa fa-search"></i>SHOW</button>
+									</div>
+									<!-- </form> -->
 								</div>
 								<div class="clearfix"></div>
 							</div>
@@ -235,8 +235,7 @@
 				},
 				type: 'POST',
 				success: function(data) {
-					console.log(data);
-					alert(data);
+
 					// $('#submit_button').attr('disabled', false);
 					$('#getRoutine').html(data);
 
