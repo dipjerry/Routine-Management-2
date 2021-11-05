@@ -70,10 +70,6 @@ if (isset($_POST["action"])) {
         WHERE day= :days";
 
         $object->execute($data);
-        // $data = array(
-        //     ':period'              =>    $period,
-        //     ':days'              =>    $object->clean_input($_POST['days']),
-        // );
         $object->query = "
         UPDATE " . $object->clean_input($_POST['teacher']) . " SET  " . $free_period . " =  :period  
         WHERE day= :days";
@@ -122,5 +118,31 @@ if (isset($_POST["action"])) {
 		";
         $object->execute();
         echo '<div class="alert alert-success">Quantity Deleted</div>';
+    }
+
+    if ($_POST["action"] == 'cancel') {
+        $success = '';
+        $error = '';
+        $generatedTable = $object->cleanTable($_POST['course'] . $_POST['branch'] . $_POST['semester']);
+        $classroom = $object->get_classroom($_POST['course'], $_POST['branch'], $_POST['semester']);
+        $data = array(
+            ':subject'              =>    'class_cancel',
+            ':classroom'            =>    $classroom,
+            ':day'                  =>    $object->clean_input($_POST['day']),
+            ':period'               =>    $object->clean_input($_POST['period']),
+        );
+        $object->query = "
+        INSERT INTO message (subject, classroom, day,  period)
+        VALUES (:subject , :classroom , :day , :period)";
+
+        $object->execute($data);
+
+        $success = '<div class="alert alert-success">class canceled</div>';
+
+        $output = array(
+            'success'    =>    $success,
+            'error'    =>    $error
+        );
+        echo json_encode($output);
     }
 }

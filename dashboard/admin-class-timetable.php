@@ -57,7 +57,8 @@
 						<div class="dash-item">
 							<h6 class="item-title"><i class="fa fa-edit"></i>EDIT TIMETABLE</h6>
 							<div class="inner-item">
-								<table id="routineTable" class="display responsive nowrap" cellspacing="0" width="100%">
+								<!-- <table id="attendenceDetailedTable" class="display responsive nowrap" cellspacing="0" width="100%"> -->
+								<table id="routineTable" class="display responsive nowrap table table-bordered" cellspacing="0" width="100%">
 									<thead>
 										<tr>
 											<th><i class="fa fa-clock-o"></i>WEEKENDS</th>
@@ -71,7 +72,7 @@
 											<th><i class="fa fa-calendar"></i>ACTION</th>
 										</tr>
 									</thead>
-									<tbody id="getRoutine">
+									<tbody id="getRoutine" class="table-striped ">
 
 									</tbody>
 								</table>
@@ -204,22 +205,9 @@
 
 <script>
 	$(document).ready(function() {
-		// var dataTable = $('#routineTable').DataTable({
-		// 	"processing": true,
-		// 	"serverSide": true,
-		// 	"order": [],
-		// 	"ajax": {
-		// 		url: "./controller/timetable_action.php",
-		// 		type: "POST",
-		// 		data: {
-		// 			action: 'fetch'
-		// 		}
-		// 	},
-		// 	"columnDefs": [{
-		// 		"targets": [4],
-		// 		"orderable": true,
-		// 	}, ],
-		// });
+		$('#attendenceDetailedTable').dataTable({
+			"ordering": false
+		});
 		$('#preview-btn').on('click', function(event) {
 			const course = $('#course_select').val();
 			const branch = $('#branch_select').val();
@@ -235,48 +223,11 @@
 				},
 				type: 'POST',
 				success: function(data) {
-
-					// $('#submit_button').attr('disabled', false);
 					$('#getRoutine').html(data);
-
-
 				}
 			})
 
 		});
-		// $('#timetablePreview').on('submit', function(event) {
-		// 	event.preventDefault();
-		// 	if ($('#timetablePreview').parsley().isValid()) {
-		// 		$.ajax({
-		// 			url: "./controller/preview_timetable_action.php",
-		// 			method: "POST",
-		// 			data: new FormData(this),
-		// 			dataType: 'json',
-		// 			// contentType: false,
-		// 			processData: false,
-		// 			success: function(data) {
-		// 				console.log(data);
-		// 				alert(data);
-		// 				// $('#submit_button').attr('disabled', false);
-		// 				$('#getRoutine').html(data);
-		// 				// if (data.error != '') {
-		// 				// 	$('#form_message').html(data.error);
-		// 				// 	$('#submit_button').val('Add');
-		// 				// } else {
-		// 				// 	$('#productModal').modal('hide');
-		// 				// 	$('#message').html(data.success);
-		// 				// 	dataTable.ajax.reload();
-		// 				// 	setTimeout(function() {
-		// 				// 		$('#message').html('');
-		// 				// 	}, 5000);
-		// 				// }
-
-
-		// 			}
-		// 		})
-		// 	}
-		// });
-
 		$(document).on('change', '#course_select', function() {
 			let course = $(this).val();
 			$.ajax({
@@ -290,15 +241,40 @@
 					const dropDown = JSON.parse(response);
 					$("#semester_container").html(dropDown.semester);
 					$("#branch_container").html(dropDown.branch);
-					// $("#slot_container").html(slot);
 				}
 			});
 		});
-
 		$(document).on('click', '.delete_button', function() {
-			var id = $(this).data('id');
+			const id = $(this).data('id');
 			$('#delete_hidden_id').val(id);
 			$('#deleteDetailModal').modal('show');
+		});
+
+		$(document).on('click', '.cancel_class', function() {
+			alert('canceled');
+			day = $(this).data('day');
+			period = $(this).data('period');
+			const course = $('#course_select').val();
+			const branch = $('#branch_select').val();
+			const semester = $('#semester_list').val();
+
+			// alert("day = " + day + " period = " + period)
+			// alert("course = " + course + " branch = " + branch + " semester = " + semester)
+			$.ajax({
+				url: "./controller/timetable_action.php",
+				data: {
+					period: period,
+					day: day,
+					course: course,
+					branch: branch,
+					semester: semester,
+					action: 'cancel'
+				},
+				type: 'POST',
+				success: function(response) {
+					alert("success");
+				}
+			});
 		});
 		$(document).on('click', '#delete', function() {
 			var id = $('#delete_hidden_id').val();

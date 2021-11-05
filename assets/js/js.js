@@ -21,7 +21,7 @@ jQuery(document).ready(function($) {
     jQuery("#studentDOB").datepicker({ changeYear: true });
 
     //Student attendence detailed table
-    jQuery('#attendenceDetailedTable').DataTable();
+    // jQuery('#attendenceDetailedTable').DataTable();
 
 
     //Student attendence horizontal bar chart

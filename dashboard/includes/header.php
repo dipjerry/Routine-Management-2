@@ -15,10 +15,10 @@
     <link href="../assets/css/custom.css" rel="stylesheet" media="screen">
     <link href="../assets/css/owl.theme.default.min.css" rel="stylesheet" media="screen">
     <link href="../assets/css/jquery.dataTables.min.css" rel="stylesheet" media="screen">
+    <link href="../assets/css/custom.css" rel="stylesheet" media="screen">
     <link href="../assets/css/responsive.dataTables.min.css" rel="stylesheet" media="screen">
     <link href="../assets/css/style.css" rel="stylesheet" media="screen">
     <link href="https://gitcdn.github.io/bootstrap-toggle/2.2.2/css/bootstrap-toggle.min.css" rel="stylesheet">
-
     <!-- Fonts -->
     <link href='https://fonts.googleapis.com/css?family=Open+Sans:400,600,700,800' rel='stylesheet' type='text/css'>
     <link href="../assets/fonts/font-awesome/css/font-awesome.min.css" rel="stylesheet" media="screen">

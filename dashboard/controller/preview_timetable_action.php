@@ -122,12 +122,12 @@ if (isset($_POST["action"])) {
         echo '<div class="alert alert-success">Quantity Deleted</div>';
     }
     if ($_POST["action"] == 'display') {
-        $generatedTable = $object->cleanTable($_POST['course'] . $_POST['branch'] . $_POST['semester']);
+        // $generatedTable = $object->cleanTable();
         $html = '';
 
         $days = array("monday", "tuesday", "wednesday", "thursday", "friday", "saturday");
         foreach ($days as $day) {
-            $html .= $object->get_table_weekends_list($generatedTable,  $day);
+            $html .= $object->get_table_weekends_list($_POST['course'], $_POST['branch'], $_POST['semester'],  $day);
         }
         echo $html;
     }

@@ -451,32 +451,78 @@ class routine
         $html .= '</select>';
         return $html;
     }
-    function get_table_weekends_list($table_name,  $day)
+
+    function get_classroom_details($classroom)
     {
+        $this->query = "select *  from classroom_allotment where classroom = '" . $classroom . "' ORDER BY course_code ASC";
+        $result = $this->get_result();
+        foreach ($result as $row) {
+            $resultset[] = $row;
+        }
+        if (!empty($resultset)) {
+            return $resultset;
+        }
+    }
+    // function is_canceled($classroom, $day, $period)
+    // {
+    //     $this->query = "select *  from message where classroom = '" . $classroom . "' AND day = '" . $day . "' AND period = '" . $period . "' LIMIT 1";
+    //     var_dump($this->query);
+    //     $result = $this->get_result();
+    //     foreach ($result as $row) {
+    //         $resultset[] = $row;
+    //     }
+    //     if (!empty($resultset)) {
+    //         return "<br> canceled";
+    //     }
+    //     return;
+    // }
+    function is_canceled($classroom, $day, $period)
+    {
+        $this->query = "select *  from message where classroom = '" . $classroom . "' AND day = '" . $day . "' AND period = '" . $period . "' LIMIT 1";
+        var_dump($this->query);
+        $result = $this->get_result();
+        foreach ($result as $row) {
+            $resultset[] = $row;
+        }
+        if (!empty($resultset)) {
+            return true;
+        }
+        return;
+    }
+
+    function get_table_weekends_list($course, $branch, $semester,  $day)
+    {
+        $table_name = $this->cleanTable($_POST['course'] . $_POST['branch'] . $_POST['semester']);
+        $class_room = $this->get_classroom($_POST['course'], $_POST['branch'], $_POST['semester']);
         $this->query = "
 		SELECT * FROM $table_name where day = '" . $day . "'
 		";
         $result = $this->get_result();
+        // $class_detail = $this
         $table = '';
         foreach ($result as $row) {
-            $table .= '<tr>';
-            $table .= '<td>' . $row['day'] . '</td>';
-            $table .= '<td>' . $row['period1'] . '</td>';
-            $table .= '<td>' . $row['period2'] . '</td>';
-            $table .= '<td>' . $row['period3'] . '</td>';
-            $table .= '<td>' . $row['period4'] . '</td>';
-            $table .= '<td>' . $row['period5'] . '</td>';
-            $table .= '<td>' . $row['period6'] . '</td>';
+            // if ($this->is_canceled($class_room, $row['day'], 'monday')) {
+            // }
+            $table .= '<tr scope="row">';
+            $table .= '<td scope="col"><span>' . $row['day'] . '</span></td>';
+            if ($this->is_canceled($class_room, $row['day'], 'period2')) {
+                $table .= '<td scope="col"><button class="nostylebutton cancel_class btn btn-danger"  data-day="' . $row['day'] . '" data-period="period1">' . $row['period1']   . '<br>cancelled</button></span></td>';
+            } else {
+                $table .= '<td scope="col"><button class="nostylebutton cancel_class"  data-day="' . $row['day'] . '" data-period="period1">' . $row['period1'] . '</button></span></td>';
+            }
+            $table .= '<td scope="col"><button class="nostylebutton cancel_class"  data-day="' . $row['day'] . '" data-period="period2">' . $row['period2']  . '</button></span></td>';
+            if ($this->is_canceled($class_room, $row['day'], 'period3')) {
+
+                $table .= '<td scope="col" style="background-color:red ; color: white"><button class="nostylebutton cancel_class"  data-day="' . $row['day'] . '" data-period="period3">' . $row['period3'] .  '<br>cancelled</button></span></td>';
+            } else {
+                $table .= '<td scope="col"><button class="nostylebutton cancel_class"  data-day="' . $row['day'] . '" data-period="period3">' . $row['period3'] .  '</button></span></td>';
+            }
+            $table .= '<td scope="col"><button class="nostylebutton cancel_class"  data-day="' . $row['day'] . '" data-period="period4">' . $row['period4'] . $this->is_canceled($class_room, $row['day'], 'period4') . '</button></span></td>';
+            $table .= '<td scope="col"><button class="nostylebutton cancel_class"  data-day="' . $row['day'] . '" data-period="period5">' . $row['period5'] . $this->is_canceled($class_room, $row['day'], 'period5') . '</button></span></td>';
+            $table .= '<td scope="col"><span>BREAK</span></td>';
+            $table .= '<td scope="col"><button class="nostylebutton cancel_class" data-day="' . $row['day'] . '" data-period="period6">' . $row['period6'] . $this->is_canceled($class_room, $row['day'], 'period6') . '</span></td>';
             $table .= '</td>';
         }
         return $table;
     }
-
-
-
-
-    // while ($row = $res->fetch()) {
-
-    // }
-    // echo $free_slot;
 }
