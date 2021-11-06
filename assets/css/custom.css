@@ -22,3 +22,8 @@
 .nostylebutton:focus {
     outline: 0;
 }
+
+.cancelclass {
+    background-color: red;
+    color: white
+}

@@ -76,7 +76,6 @@ if (isset($_POST["action"])) {
         $object->execute($data);
 
         $class_room = $object->get_classroom($_POST['course'], $_POST['branch'], $_POST['semester']);
-        var_dump($class_room);
         $data = array(
             ':class_room'              =>    $class_room,
             ':period'              =>    $free_period,
@@ -123,8 +122,11 @@ if (isset($_POST["action"])) {
     if ($_POST["action"] == 'cancel') {
         $success = '';
         $error = '';
-        $generatedTable = $object->cleanTable($_POST['course'] . $_POST['branch'] . $_POST['semester']);
-        $classroom = $object->get_classroom($_POST['course'], $_POST['branch'], $_POST['semester']);
+        $course = $_SESSION["course"];
+        $branch = $_SESSION["branch"];
+        $semester = $_SESSION["semester"];
+        $generatedTable = $object->cleanTable($course . $branch . $semester);
+        $classroom = $object->get_classroom($course, $branch, $semester);
         $data = array(
             ':subject'              =>    'class_cancel',
             ':classroom'            =>    $classroom,
@@ -135,6 +137,33 @@ if (isset($_POST["action"])) {
         INSERT INTO message (subject, classroom, day,  period)
         VALUES (:subject , :classroom , :day , :period)";
 
+        $object->execute($data);
+
+        $success = '<div class="alert alert-success">class canceled</div>';
+
+        $output = array(
+            'success'    =>    $success,
+            'error'    =>    $error
+        );
+        echo json_encode($output);
+    }
+    if ($_POST["action"] == 'active') {
+
+        $success = '';
+        $error = '';
+        $course = $_SESSION["course"];
+        $branch = $_SESSION["branch"];
+        $semester = $_SESSION["semester"];
+        $generatedTable = $object->cleanTable($course . $branch . $semester);
+        $classroom = $object->get_classroom($course, $branch, $semester);
+        $data = array(
+            ':classroom'            =>    $classroom,
+            ':day'                  =>    $object->clean_input($_POST['day']),
+            ':period'               =>    $object->clean_input($_POST['period']),
+            ':status'              =>    '',
+        );
+        $object->query = "
+        UPDATE message SET subject = :status where classroom = :classroom and day = :day and period = :period";
         $object->execute($data);
 
         $success = '<div class="alert alert-success">class canceled</div>';

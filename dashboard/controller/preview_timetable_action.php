@@ -78,7 +78,6 @@ if (isset($_POST["action"])) {
         $object->execute($data);
 
         $class_room = $object->get_classroom($_POST['course'], $_POST['branch'], $_POST['semester']);
-        var_dump($class_room);
         $data = array(
             ':class_room'              =>    $class_room,
             ':period'              =>    $period,
@@ -121,13 +120,32 @@ if (isset($_POST["action"])) {
         $object->execute();
         echo '<div class="alert alert-success">Quantity Deleted</div>';
     }
+
     if ($_POST["action"] == 'display') {
         // $generatedTable = $object->cleanTable();
-        $html = '';
+        // session_start();
+        $_SESSION["course"] = $_POST['course'];
+        $_SESSION["branch"] = $_POST['branch'];
+        $_SESSION["semester"] = $_POST['semester'];
 
+        $html = '';
         $days = array("monday", "tuesday", "wednesday", "thursday", "friday", "saturday");
         foreach ($days as $day) {
             $html .= $object->get_table_weekends_list($_POST['course'], $_POST['branch'], $_POST['semester'],  $day);
+        }
+        echo $html;
+    }
+    if ($_POST["action"] == 'display_on_load') {
+        // $generatedTable = $object->cleanTable();
+        // session_start();
+        $course = $_SESSION["course"];
+        $branch = $_SESSION["branch"];
+        $semester = $_SESSION["semester"];
+
+        $html = '';
+        $days = array("monday", "tuesday", "wednesday", "thursday", "friday", "saturday");
+        foreach ($days as $day) {
+            $html .= $object->get_table_weekends_list($course, $branch, $semester,  $day);
         }
         echo $html;
     }

@@ -4,7 +4,7 @@ include('../routine.php');
 $object = new routine();
 if (isset($_POST["action"])) {
     if ($_POST["action"] == 'fetch') {
-        $order_column = array('teacher_code', 'name', 'gender', 'phone', 'email', '', '');
+        $order_column = array('teacher_code', 'name', 'gender', 'phone', 'email', 'subject', '');
         $output = array();
         $main_query = "SELECT * FROM teacher_list";
         $search_query = '';
@@ -39,6 +39,7 @@ if (isset($_POST["action"])) {
             $sub_array[] = $row["gender"];
             $sub_array[] = $row["phone"];
             $sub_array[] = $row["email"];
+            $sub_array[] = $object->get_subject_bycode($row["subject"]);
             $sub_array[] = '<img src="./uploads/images/faculty/' . $row["display_image"] . '" class="img-fluid img-thumbnail" width="100" height="100" />';
             $sub_array[] = '
             <div align="center">

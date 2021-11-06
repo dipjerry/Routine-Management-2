@@ -69,7 +69,7 @@
 											<th><i class="fa fa-calendar"></i>PERIOD 5</th>
 											<th><i class="fa fa-calendar"></i>BREAK</th>
 											<th><i class="fa fa-calendar"></i>PERIOD 6</th>
-											<th><i class="fa fa-calendar"></i>ACTION</th>
+
 										</tr>
 									</thead>
 									<tbody id="getRoutine" class="table-striped ">
@@ -208,6 +208,21 @@
 		$('#attendenceDetailedTable').dataTable({
 			"ordering": false
 		});
+
+		function onload_display() {
+			$.ajax({
+				url: "./controller/preview_timetable_action.php",
+				type: "POST",
+				data: {
+					action: 'display_on_load'
+				},
+				type: 'POST',
+				success: function(data) {
+					$('#getRoutine').html(data);
+				}
+			})
+		}
+		onload_display();
 		$('#preview-btn').on('click', function(event) {
 			const course = $('#course_select').val();
 			const branch = $('#branch_select').val();
@@ -251,30 +266,47 @@
 		});
 
 		$(document).on('click', '.cancel_class', function() {
-			alert('canceled');
-			day = $(this).data('day');
-			period = $(this).data('period');
-			const course = $('#course_select').val();
-			const branch = $('#branch_select').val();
-			const semester = $('#semester_list').val();
+			const day = $(this).data('day');
+			const period = $(this).data('period');
+			const status = $(this).data('status');
+			let action = '';
+			let message = '';
+			let state = '';
+			if (status == 'cancelled') {
+				action = 'active';
+				message = 'Active class'
+				state = 'Active'
+			} else {
+				action = "cancel";
+				message = 'Confirm cancel class again?'
+				state = 'cancelled'
+			}
+			$.confirm({
+				title: 'Confirm!',
+				content: message,
+				buttons: {
+					confirm: function() {
+						$.ajax({
+							url: "./controller/timetable_action.php",
+							data: {
+								period: period,
+								day: day,
+								action: action
+							},
+							type: 'POST',
+							success: function(response) {
+								onload_display();
+								$.alert(state);
+							}
+						});
+					},
+					cancel: function() {
+						// $.alert('Canceled!');
+					},
 
-			// alert("day = " + day + " period = " + period)
-			// alert("course = " + course + " branch = " + branch + " semester = " + semester)
-			$.ajax({
-				url: "./controller/timetable_action.php",
-				data: {
-					period: period,
-					day: day,
-					course: course,
-					branch: branch,
-					semester: semester,
-					action: 'cancel'
-				},
-				type: 'POST',
-				success: function(response) {
-					alert("success");
 				}
 			});
+
 		});
 		$(document).on('click', '#delete', function() {
 			var id = $('#delete_hidden_id').val();

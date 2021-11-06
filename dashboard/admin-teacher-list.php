@@ -29,6 +29,7 @@
 											<th>Gender</th>
 											<th>Phone</th>
 											<th>Email</th>
+											<th>Subject</th>
 											<th>Display Image</th>
 											<th>Action</th>
 										</tr>
@@ -148,7 +149,7 @@
 				}
 			},
 			"columnDefs": [{
-				"targets": [5],
+				"targets": [6],
 				"orderable": true,
 			}, ],
 		});

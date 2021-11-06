@@ -24,6 +24,8 @@
     <link href="../assets/fonts/font-awesome/css/font-awesome.min.css" rel="stylesheet" media="screen">
     <link rel="stylesheet" type="text/css" href="../assets/vendor/parsley/parsley.css" />
     <link href="../assets/css/sb-admin-2.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.2/jquery-confirm.min.css">
+
 </head>
 
 <body>

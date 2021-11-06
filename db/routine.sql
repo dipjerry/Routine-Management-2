@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Nov 05, 2021 at 08:25 AM
+-- Generation Time: Nov 06, 2021 at 06:19 AM
 -- Server version: 10.4.21-MariaDB
 -- PHP Version: 7.3.30
 
@@ -48,22 +48,6 @@ CREATE TABLE `branch` (
   `branch` varchar(30) NOT NULL,
   `branch_code` varchar(30) NOT NULL,
   `description` varchar(300) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
-
--- --------------------------------------------------------
-
---
--- Table structure for table `bt6500cse12342`
---
-
-CREATE TABLE `bt6500cse12342` (
-  `day` varchar(10) NOT NULL,
-  `period1` varchar(30) DEFAULT NULL,
-  `period2` varchar(30) DEFAULT NULL,
-  `period3` varchar(30) DEFAULT NULL,
-  `period4` varchar(30) DEFAULT NULL,
-  `period5` varchar(30) DEFAULT NULL,
-  `period6` varchar(30) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 -- --------------------------------------------------------
@@ -114,17 +98,32 @@ CREATE TABLE `course` (
 -- --------------------------------------------------------
 
 --
--- Table structure for table `dp1234`
+-- Table structure for table `message`
 --
 
-CREATE TABLE `dp1234` (
+CREATE TABLE `message` (
+  `id` int(11) NOT NULL,
+  `subject` enum('class_cancel','leave','') NOT NULL,
+  `classroom` varchar(30) NOT NULL,
   `day` varchar(10) NOT NULL,
-  `period1` varchar(30) DEFAULT NULL,
-  `period2` varchar(30) DEFAULT NULL,
-  `period3` varchar(30) DEFAULT NULL,
-  `period4` varchar(30) DEFAULT NULL,
-  `period5` varchar(30) DEFAULT NULL,
-  `period6` varchar(30) DEFAULT NULL
+  `period` varchar(8) NOT NULL,
+  `added_on` timestamp NOT NULL DEFAULT current_timestamp()
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `routine_list`
+--
+
+CREATE TABLE `routine_list` (
+  `id` int(11) NOT NULL,
+  `class_room` varchar(30) NOT NULL,
+  `period` enum('period1','period2','period3','period4','period5','period6') NOT NULL,
+  `day` enum('monday','tuesday','wednesday','thursday','friday','saturday') NOT NULL,
+  `status` enum('available','cancelled') NOT NULL,
+  `updated_on` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),
+  `added_on` timestamp NULL DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 -- --------------------------------------------------------
@@ -198,12 +197,6 @@ ALTER TABLE `branch`
   ADD PRIMARY KEY (`id`);
 
 --
--- Indexes for table `bt6500cse12342`
---
-ALTER TABLE `bt6500cse12342`
-  ADD PRIMARY KEY (`day`);
-
---
 -- Indexes for table `classroom`
 --
 ALTER TABLE `classroom`
@@ -222,10 +215,16 @@ ALTER TABLE `course`
   ADD PRIMARY KEY (`id`);
 
 --
--- Indexes for table `dp1234`
+-- Indexes for table `message`
 --
-ALTER TABLE `dp1234`
-  ADD PRIMARY KEY (`day`);
+ALTER TABLE `message`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indexes for table `routine_list`
+--
+ALTER TABLE `routine_list`
+  ADD PRIMARY KEY (`id`);
 
 --
 -- Indexes for table `subject`
@@ -278,6 +277,18 @@ ALTER TABLE `classroom_allotment`
 -- AUTO_INCREMENT for table `course`
 --
 ALTER TABLE `course`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT for table `message`
+--
+ALTER TABLE `message`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT for table `routine_list`
+--
+ALTER TABLE `routine_list`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
