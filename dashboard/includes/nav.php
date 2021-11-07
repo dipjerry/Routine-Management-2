@@ -112,7 +112,7 @@
             </li> -->
             <li class="user dropdown">
                 <a href="#" class="dropdown-toggle" data-toggle="dropdown">
-                    <span><img src="../assets/img/parent/parent2.jpg" alt="user">JOHN DOE<span class="caret"></span></span>
+                    <span><img src="../assets/img/parent/parent2.jpg" alt="user"><?php echo $_SESSION['user_id'] ?><span class="caret"></span></span>
                 </a>
                 <ul class="dropdown-menu notification-list">
                     <li>
