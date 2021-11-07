@@ -130,11 +130,64 @@ if (isset($_POST["action"])) {
         echo json_encode($output);
     }
     if ($_POST["action"] == 'delete') {
+        $id = $_POST["id"];
+        $table = $object->get_classroom_details_by_id($id);
+        $generatedTable = $object->cleanTable($table['course_code'] . $table['branch_code'] . $table['semester']);
+        $object->execute();
+
         $object->query = "
-		DELETE FROM drink_quantity_table 
-		WHERE quantity_id = '" . $_POST["id"] . "'
+		DELETE FROM classroom_allotment 
+		WHERE id = '" . $id . "'
 		";
         $object->execute();
-        echo '<div class="alert alert-success">Quantity Deleted</div>';
+        $object->query = "DROP TABLE " . $generatedTable;
+        $object->execute();
+
+        echo '<div class="alert alert-success">Allotment Deleted</div>';
+    }
+
+    if ($_POST["action"] == 'edit') {
+        $error = '';
+        $success = '';
+
+        $data = array(
+            ':id'                  =>     $_POST['id'],
+            ':course_code'                  =>    $object->clean_input($_POST['course']),
+            ':branch_code'                  =>    $object->clean_input($_POST['branch']),
+            ':semester'                  =>    $object->clean_input($_POST['semester']),
+            ':classroom'                  =>    $object->clean_input($_POST['classroom']),
+        );
+        $object->query = "
+			UPDATE classroom_allotment
+			SET course_code = :course_code, 
+			branch_code = :branch_code,   
+			semester = :semester,   
+			classroom = :classroom   
+			WHERE id = :id
+			";
+        $object->execute($data);
+        $success = '<div class="alert alert-success">classroom allotment Updated</div>';
+        $output = array(
+            'error'        =>    $error,
+            'success'    =>    $success
+        );
+        echo json_encode($output);
+    }
+
+    if ($_POST["action"] == 'fetch_single') {
+        $object->query = "
+		SELECT * FROM classroom_allotment 
+		WHERE id = '" . $_POST["id"] . "'
+		";
+        $result = $object->get_result();
+        $data = array();
+        foreach ($result as $row) {
+            $data['course_code'] = $row['course_code'];
+            $data['branch'] = $row['branch_code'];
+            $data['semester'] = $row['semester'];
+            $data['classroom'] = $row['classroom'];
+            $data['id'] = $row['id'];
+        }
+        echo json_encode($data);
     }
 }

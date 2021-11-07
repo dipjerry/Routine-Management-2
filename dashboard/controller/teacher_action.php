@@ -128,6 +128,124 @@ if (isset($_POST["action"])) {
         );
         echo json_encode($output);
     }
+    // var_dump($_POST);
+    if ($_POST["action"] == 'edit') {
+        // var_dump("hello");
+        $error = '';
+        $success = '';
+        $success = '';
+        $data = array(
+            ':id'        =>    $_POST["id"],
+            ':teacher_alias'        =>    $_POST["alias"],
+            ':teacher_code'        =>    $_POST["form_hidden_id"]
+        );
+        $object->query = "SELECT * FROM teacher_list WHERE alias = :teacher_alias 
+        AND teacher_code =:teacher_code AND id != :id";
+        $object->execute($data);
+        $tname = '';
+
+        $tcode = $object->clean_input($_POST["form_hidden_id"]);
+
+        if ($_POST["mname"] != '') {
+            $tname = $_POST["fname"] . ' ' . $_POST["mname"] . ' ' . $_POST["lname"];
+        } else {
+            $tname = $_POST["fname"] . ' ' . $_POST["lname"];
+        }
+
+        if ($object->row_count() > 0) {
+            $error = '<div class="alert alert-danger">Email or Alias Already Exists</div>';
+        } else {
+            $display_image = '';
+            if ($_FILES["display_image"]["name"] != '') {
+                $display_image = upload_image();
+                $data = array(
+                    ':hidden_code'              =>    $tcode,
+                    ':name'              =>    $object->clean_input($tname),
+                    ':alias'             =>    $object->e($_POST["alias"]),
+                    ':subject'             =>    $object->e($_POST["subject"]),
+                    ':gender'            =>    $object->clean_input($_POST["gender"]),
+                    ':phone'             =>    $_POST["phone"],
+                    ':email'             =>    $object->clean_input($_POST["email"]),
+                    ':display_image'     =>    $display_image,
+                );
+                $object->query = "
+			UPDATE teacher_list 
+			SET name = :name, 
+			alias = :alias, 
+			subject = :subject,   
+			gender = :gender,   
+			phone = :phone,   
+			email = :email,   
+			display_image = :display_image,   
+			WHERE teacher_code = :hidden_code
+			";
+                $object->execute($data);
+                $success = '<div class="alert alert-success">Product Updated</div>';
+            } else {
+                $data = array(
+                    ':hidden_code'              =>    $tcode,
+                    ':name'              =>    $object->clean_input($tname),
+                    ':alias'             =>    $object->e($_POST["alias"]),
+                    ':subject'             =>    $object->e($_POST["subject"]),
+                    ':gender'            =>    $object->clean_input($_POST["gender"]),
+                    ':phone'             =>    $_POST["contact"],
+                    ':email'             =>    $object->clean_input($_POST["email"]),
+                );
+                $object->query = "
+			UPDATE teacher_list 
+			SET name = :name, 
+			alias = :alias, 
+			subject = :subject,   
+			gender = :gender,   
+			phone = :phone,   
+			email = :email   
+			WHERE teacher_code = :hidden_code
+			";
+                $object->execute($data);
+                $success = '<div class="alert alert-success">Product Updated</div>';
+            }
+        }
+        $output = array(
+            'error'        =>    $error,
+            'success'    =>    $success
+        );
+        echo json_encode($output);
+    }
+
+    if ($_POST["action"] == 'fetch_single') {
+        $object->query = "
+		SELECT * FROM teacher_list 
+		WHERE id = '" . $_POST["id"] . "'
+		";
+        $result = $object->get_result();
+        $data = array();
+        foreach ($result as $row) {
+            $parts = explode(" ", $row['name']);
+            $data['fname'] = '';
+            $data['mname'] = '';
+            $data['lname'] = '';
+            if (count($parts) == 2) {
+                $data['fname'] = $parts[0];
+                $data['mname'] = '';
+                $data['lname'] = $parts[1];
+            }
+            if (count($parts) == 3) {
+                $data['fname'] = $parts[0];
+                $data['mname'] = $parts[1];
+                $data['lname'] = $parts[2];
+            }
+
+            $data['teacher_code'] = $row['teacher_code'];
+            $data['alias'] = $row['alias'];
+            $data['subject'] = $row['subject'];
+            $data['gender'] = $row['gender'];
+            $data['phone'] = $row['phone'];
+            $data['email'] = $row['email'];
+            $data['id'] = $row['id'];
+        }
+        echo json_encode($data);
+    }
+
     if ($_POST["action"] == 'delete') {
         $id = $_POST["id"];
         $object->query = "SELECT display_image , teacher_code FROM teacher_list WHERE id = '$id'";
@@ -158,17 +276,3 @@ function upload_image()
         return $new_name;
     }
 }
-// function make_avatar($character)
-// {
-// 	$path = "/images/" . time() . ".png";
-// 	$image = imagecreate(200, 200);
-// 	$red = rand(0, 255);
-// 	$green = rand(0, 255);
-// 	$blue = rand(0, 255);
-// 	imagecolorallocate($image, 230, 230, 230);
-// 	$textcolor = imagecolorallocate($image, $red, $green, $blue);
-// 	imagettftext($image, 100, 0, 55, 150, $textcolor, 'font/arial.ttf', $character);
-// 	imagepng($image, $path);
-// 	imagedestroy($image);
-// 	return $path;
-// }

@@ -64,13 +64,13 @@ if (isset($_POST["action"])) {
         if ($_FILES["image"]["name"] != '') {
             $display_image = upload_image();
         } else {
-            $display_image = NULL;
+            $display_image = '';
         }
         $link = '';
         if ($_POST["link"] != '') {
             $link = $object->clean_input($_POST["link"]);
         } else {
-            $link = NULL;
+            $link = '';
         }
 
         $data = array(
@@ -92,58 +92,73 @@ if (isset($_POST["action"])) {
         );
         echo json_encode($output);
     }
-    if ($_POST["action"] == 'fetch_single') {
-        $object->query = "
-		SELECT * FROM product_table 
-		WHERE product_id = '" . $_POST["product_id"] . "'
-		";
-        $result = $object->get_result();
-        $data = array();
-        foreach ($result as $row) {
-            $data['category_name'] = $row['category_name'];
-            $data['product_name'] = $row['name'];
-            $data['product_price'] = $row['price'];
-        }
-        echo json_encode($data);
-    }
-    if ($_POST["action"] == 'Edit') {
+    if ($_POST["action"] == 'edit') {
+        // var_dump("hello");
         $error = '';
         $success = '';
-        $data = array(
-            ':category_name'    =>    $_POST["category_name"],
-            ':product_name'        =>    $_POST["product_name"],
-            ':product_id'        =>    $_POST['hidden_id']
-        );
-        $object->query = "
-		SELECT * FROM product_table 
-		WHERE category_name = :category_name 
-		AND name = :product_name
-		AND product_id != :product_id
-		";
-        $object->execute($data);
-        if ($object->row_count() > 0) {
-            $error = '<div class="alert alert-danger">Product Already Exists</div>';
-        } else {
+        $success = '';
+
+        $display_image = '';
+        $tcode = $object->clean_input($_POST["id"]);
+
+        if ($_FILES["image"]["name"] != '') {
+            $display_image = upload_image();
             $data = array(
-                ':category_name'    =>    $_POST["category_name"],
-                ':product_name'        =>    $object->clean_input($_POST["product_name"]),
-                ':product_price'    =>    $object->clean_input($_POST["product_price"])
+                ':hidden_code'              =>    $tcode,
+                ':subject'             =>    $object->clean_input($_POST["subject"]),
+                ':message'             =>    $object->clean_input($_POST["message"]),
+                ':link'             =>    $object->clean_input($_POST["link"]),
+                ':display_image'     =>    $display_image,
             );
             $object->query = "
-			UPDATE product_table 
-			SET category_name = :category_name, 
-			product_name = :product_name, 
-			product_price = :product_price   
-			WHERE product_id = '" . $_POST['hidden_id'] . "'
+			UPDATE announcement 
+			SET subject = :subject, 
+			message = :message, 
+			link = :link,    
+			display_image = :display_image
+			WHERE id = :hidden_code
+			";
+            $object->execute($data);
+            $success = '<div class="alert alert-success">Updated</div>';
+        } else {
+            $data = array(
+                ':hidden_code'              =>    $tcode,
+                ':subject'             =>    $object->clean_input($_POST["subject"]),
+                ':message'             =>    $object->clean_input($_POST["message"]),
+                ':link'             =>    $object->clean_input($_POST["link"]),
+            );
+            $object->query = "
+			UPDATE announcement 
+			SET subject = :subject, 
+			message = :message, 
+			link = :link    
+			WHERE id = :hidden_code
 			";
             $object->execute($data);
             $success = '<div class="alert alert-success">Product Updated</div>';
         }
+
         $output = array(
             'error'        =>    $error,
             'success'    =>    $success
         );
         echo json_encode($output);
+    }
+
+    if ($_POST["action"] == 'fetch_single') {
+        $object->query = "
+		SELECT * FROM announcement 
+		WHERE id = '" . $_POST["id"] . "'
+		";
+        $result = $object->get_result();
+        $data = array();
+        foreach ($result as $row) {
+            $data['id'] = $row['id'];
+            $data['subject'] = $row['subject'];
+            $data['message'] = $row['message'];
+            $data['link'] = $row['link'];
+        }
+        echo json_encode($data);
     }
 
     if ($_POST["action"] == 'delete') {

@@ -125,27 +125,35 @@
 		</div>
 
 		<!-- Delete Modal -->
-		<div id="deleteDetailModal" class="modal fade" role="dialog">
+		<div id="deleteDetailModal" style="z-index:9999 !important;" class="modal">
 			<div class="modal-dialog">
-				<!-- Modal content-->
 				<div class="modal-content">
 					<div class="modal-header">
+						<h4 class="modal-title bill_details" id="modal_title">DELETE S</h4>
 						<button type="button" class="close" data-dismiss="modal">&times;</button>
-						<h4 class="modal-title"><i class="fa fa-trash"></i>DELETE SECTION</h4>
 					</div>
 					<div class="modal-body">
 						<div class="table-action-box">
-							<a href="#" class="save"><i class="fa fa-check"></i>YES</a>
-							<a href="#" class="cancel" data-dismiss="modal"><i class="fa fa-ban"></i>CLOSE</a>
+							<h3>Are you sure you want to delete this slot?</h3>
 						</div>
 						<div class="clearfix"></div>
+					</div>
+					<div class="modal-footer">
+						<input type="hidden" name="table_name" id="table_name">
+						<input type="hidden" name="teacher" id="teacher">
+						<input type="hidden" name="period" id="period">
+						<input type="hidden" name="day" id="day">
+						<input type="hidden" name="class" id="class">
+						<input type="hidden" name="delete_hidden_id" id="delete_hidden_id">
+						<button type="button" class="btn btn-danger" data-dismiss="modal">Cancel</button>
+						<button type="button" class="btn btn-success" id="delete" data-dismiss="modal"> &nbsp;Okay &nbsp;</button>
 					</div>
 				</div>
 			</div>
 		</div>
 
 		<!--Edit details modal-->
-		<div id="editDetailModal" class="modal fade" role="dialog">
+		<div id="editDetailModal" style="z-index:9999 !important;" class="modal">
 			<div class="modal-dialog">
 				<!-- Modal content-->
 				<div class="modal-content">
@@ -153,38 +161,34 @@
 						<button type="button" class="close" data-dismiss="modal">&times;</button>
 						<h4 class="modal-title"><i class="fa fa-edit"></i>EDIT SECTION DETAILS</h4>
 					</div>
-					<div class="modal-body dash-form">
-						<div class="col-sm-4">
-							<label class="clear-top-margin"><i class="fa fa-book"></i>SECTION</label>
-							<input type="text" placeholder="SECTION" value="A" />
+					<form method="post" id="edit_routine_form">
+						<div class="modal-body dash-form">
+							<div class="col-sm-12">
+								<div class="col-sm-3">
+									<label><i class="fa fa-code"></i>SUBJECT</label>
+									<?php echo $object->no_timetable_subject() ?>
+								</div>
+							</div>
+							<div class="col-sm-12">
+								<label><i class="fa fa-user"></i>TEACHER</label>
+								<div id="teacher_container">
+									<select name="teacher" id="teacher_select" disabled required>
+										<option value="" readonly>Select Teacher</option>
+									</select>
+								</div>
+							</div>
+
+							<div class="clearfix"></div>
 						</div>
-						<div class="col-sm-4">
-							<label class="clear-top-margin"><i class="fa fa-code"></i>SECTION CODE</label>
-							<input type="text" placeholder="SECTION CODE" value="PTH05A" />
+						<div class="modal-footer">
+							<div>
+								<input type="hidden" name="action" value="Add" />
+								<button type="submit" id="register_button" class="btn btn-success btn-user p-3 m-3">
+									<i class="fa fa-paper-plane"></i>Save
+								</button>
+							</div>
 						</div>
-						<div class="col-sm-4">
-							<label class="clear-top-margin"><i class="fa fa-user-secret"></i>SECTION CLASS</label>
-							<select>
-								<option>-- Select --</option>
-								<option>5 STD</option>
-								<option>6 STD</option>
-							</select>
-						</div>
-						<div class="clearfix"></div>
-						<div class="col-sm-12">
-							<label><i class="fa fa-info-circle"></i>DESCRIPTION</label>
-							<textarea placeholder="Enter Description Here"></textarea>
-						</div>
-						<div class="clearfix"></div>
-					</div>
-					<div class="modal-footer">
-						<div>
-							<input type="hidden" name="action" value="Add" />
-							<button type="submit" id="register_button" class="btn btn-success btn-user p-3 m-3">
-								<i class="fa fa-paper-plane"></i>Save
-							</button>
-						</div>
-					</div>
+					</form>
 				</div>
 			</div>
 		</div>
@@ -247,10 +251,9 @@
 			<option value = "" readonly > Select Slot <select /option> 
 			</select>`
 
-		$(document).on('change', '#course_select', function() {
-			let course = $(this).val();
+		function dropbox(course, state) {
 			$.ajax({
-				url: "./controller/allot_classroom_action.php",
+				url: "./controller/timetable_action.php",
 				data: {
 					course: course,
 					action: 'dropDownFill'
@@ -258,11 +261,24 @@
 				type: 'POST',
 				success: function(response) {
 					const dropDown = JSON.parse(response);
-					$("#semester_container").html(dropDown.semester);
-					$("#branch_container").html(dropDown.branch);
-					$("#slot_container").html(slot);
+					if (state == 'add') {
+						$("#semester_container").html(dropDown.semester);
+						$("#branch_container").html(dropDown.branch);
+					}
+					if (state == 'edit') {
+						$("#semester_container_edit").html(dropDown.semester);
+						$("#branch_container_edit").html(dropDown.branch);
+					}
+
 				}
 			});
+		}
+
+
+		$(document).on('change', '#course_select', function() {
+			const course = $(this).val();
+			dropbox(course, 'add')
+
 		});
 		$(document).on('change', '#no_timetable_subject', function() {
 			let subject = $(this).val();
@@ -348,16 +364,35 @@
 
 		$(document).on('click', '.delete_button', function() {
 			var id = $(this).data('id');
+			var day = $(this).data('day');
+			var teacher = $(this).data('teacher');
+			var table_name = $(this).data('table_name');
+			var period = $(this).data('period');
+			var class_name = $(this).data('class');
 			$('#delete_hidden_id').val(id);
+			$('#day').val(day);
+			$('#class').val(class_name);
+			$('#period').val(period);
 			$('#deleteDetailModal').modal('show');
 		});
 		$(document).on('click', '#delete', function() {
 			var id = $('#delete_hidden_id').val();
+			var day = $('#day').val();
+			var period = $('#period').val();
+			var class_name = $('#class').val();
+			var teacher = $('#teacher').val();
+			var table_name = $('#table_name').val();
+			alert(id);
 			$.ajax({
-				url: "./controller/allot_classroom_action.php",
+				url: "./controller/timetable_action.php",
 				method: "POST",
 				data: {
+					period: period,
+					day: day,
 					id: id,
+					class_name: class_name,
+					table_name: table_name,
+					teacher: teacher,
 					action: 'delete'
 				},
 				success: function(data) {

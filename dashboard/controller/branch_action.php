@@ -86,13 +86,72 @@ if (isset($_POST["action"])) {
         );
         echo json_encode($output);
     }
+
+    if ($_POST["action"] == 'edit') {
+        $error = '';
+        $success = '';
+        $tcode = $object->clean_input($_POST["form_hidden_id"]);
+        $data = array(
+            ':hidden_code'        =>    $tcode,
+            ':id'        =>    $_POST['id'],
+        );
+        $object->query = "SELECT * FROM branch WHERE branch_code = :hidden_code AND id != :id";
+        $object->execute($data);
+
+        if ($object->row_count() > 0) {
+            $error = '<div class="alert alert-danger">Duplicate Course code!!!</div>';
+        } else {
+            $data = array(
+                ':course'                  =>    $object->clean_input($_POST['course']),
+                ':branch'                  =>    $object->clean_input($_POST['branch']),
+                ':description'             =>    $object->clean_input($_POST['description']),
+                ':hidden_code'        =>    $tcode
+
+            );
+            $object->query = "
+			UPDATE branch
+			SET course = :course, 
+			branch = :branch, 
+			description = :description   
+			WHERE branch_code = :hidden_code
+			";
+            $object->execute($data);
+            $success = '<div class="alert alert-success">Branch Updated</div>';
+        }
+        $output = array(
+            'error'        =>    $error,
+            'success'    =>    $success
+        );
+        echo json_encode($output);
+    }
+
+    if ($_POST["action"] == 'fetch_single') {
+        $object->query = "
+		SELECT * FROM branch 
+		WHERE id = '" . $_POST["id"] . "'
+		";
+        $result = $object->get_result();
+        $data = array();
+        foreach ($result as $row) {
+            $data['course'] = $row['course'];
+            $data['branch'] = $row['branch'];
+            $data['branch_code'] = $row['branch_code'];
+            $data['description'] = $row['description'];
+            $data['id'] = $row['id'];
+        }
+        echo json_encode($data);
+    }
+
+
     if ($_POST["action"] == 'delete') {
         $id = $_POST["id"];
-        $object->query = "SELECT * FROM branch WHERE id = '$id'";
-        $result = $object->get_result();
-        foreach ($result as $row) {
-            $resultset[] = $row;
-        }
-        echo '<div class="alert alert-success">Branch Deleted</div>';
+
+        $object->query = "
+		DELETE FROM branch 
+		WHERE id = '" . $id . "'
+		";
+        $object->execute();
+
+        echo '<div class="alert alert-success">branch Deleted</div>';
     }
 }

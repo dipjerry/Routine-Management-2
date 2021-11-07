@@ -6,7 +6,9 @@ class routine
     public $query;
     public $statement;
     public $pdo;
-    function routine()
+
+    function __construct()
+    // function routine()
     {
         $this->connect = new PDO("mysql:host=localhost;dbname=routine", "root", "");
         session_start();
@@ -82,6 +84,23 @@ class routine
         $html .= '</select>';
         return $html;
     }
+    function get_course_edit()
+    {
+        $this->query = "
+				SELECT course_name , course_code FROM course   
+				ORDER BY course_name ASC
+				";
+        $result = $this->get_result();
+        $html = '
+		<select name="course" id="course_select_edit" required>
+			<option value="" readonly>Select Course</option>
+		';
+        foreach ($result as $values) {
+            $html .= '<option value="' . $values['course_code'] . '">' . $values['course_name'] . '</option>';
+        }
+        $html .= '</select>';
+        return $html;
+    }
     function get_free_classroom()
     {
         $this->query = "
@@ -91,6 +110,23 @@ class routine
         $result = $this->get_result();
         $html = '
 		<select name="classroom" id="classroom_select" required>
+			<option value="" readonly>Select Classroom</option>
+		';
+        foreach ($result as $values) {
+            $html .= '<option value="' . $values['classroom_code'] . '">' . $values['classroom_code'] . '</option>';
+        }
+        $html .= '</select>';
+        return $html;
+    }
+    function get_free_classroom_edit()
+    {
+        $this->query = "
+				SELECT classroom_code FROM classroom where status = 'free'   
+				ORDER BY classroom_code ASC
+				";
+        $result = $this->get_result();
+        $html = '
+		<select name="classroom" id="classroom_select_edit" required>
 			<option value="" readonly>Select Classroom</option>
 		';
         foreach ($result as $values) {
@@ -430,6 +466,17 @@ class routine
     function get_classroom_details($classroom)
     {
         $this->query = "select *  from classroom_allotment where classroom = '" . $classroom . "' ORDER BY course_code ASC";
+        $result = $this->get_result();
+        foreach ($result as $row) {
+            $resultset[] = $row;
+        }
+        if (!empty($resultset)) {
+            return $resultset;
+        }
+    }
+    function get_classroom_details_by_id($id)
+    {
+        $this->query = "select *  from classroom_allotment where classroom = '" . $id . "' ORDER BY id DESC";
         $result = $this->get_result();
         foreach ($result as $row) {
             $resultset[] = $row;

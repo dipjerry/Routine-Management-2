@@ -86,13 +86,69 @@ if (isset($_POST["action"])) {
         );
         echo json_encode($output);
     }
+
+    if ($_POST["action"] == 'edit') {
+        $error = '';
+        $success = '';
+        $tcode = $object->clean_input($_POST["form_hidden_id"]);
+        $data = array(
+            ':hidden_code'        =>    $tcode,
+            ':id'        =>    $_POST['id'],
+        );
+        $object->query = "SELECT * FROM course WHERE course_code = :hidden_code AND id != :id";
+        $object->execute($data);
+
+        if ($object->row_count() > 0) {
+            $error = '<div class="alert alert-danger">Duplicate Course code!!!</div>';
+        } else {
+            $data = array(
+                ':hidden_code'              =>    $tcode,
+                ':course'             =>    $object->clean_input($_POST["course"]),
+                ':duration'             =>    $object->clean_input($_POST["courseDuration"]),
+                ':description'             =>    $object->clean_input($_POST["description"]),
+            );
+            $object->query = "
+			UPDATE course
+			SET course_name = :course, 
+			course_duration = :duration, 
+			description = :description   
+			WHERE course_code = :hidden_code
+			";
+            $object->execute($data);
+            $success = '<div class="alert alert-success">Course Updated</div>';
+        }
+        $output = array(
+            'error'        =>    $error,
+            'success'    =>    $success
+        );
+        echo json_encode($output);
+    }
+
+    if ($_POST["action"] == 'fetch_single') {
+        $object->query = "
+		SELECT * FROM course 
+		WHERE id = '" . $_POST["id"] . "'
+		";
+        $result = $object->get_result();
+        $data = array();
+        foreach ($result as $row) {
+            $data['course'] = $row['course_name'];
+            $data['course_code'] = $row['course_code'];
+            $data['course_duration'] = $row['course_duration'];
+            $data['description'] = $row['description'];
+            $data['id'] = $row['id'];
+        }
+        echo json_encode($data);
+    }
+
     if ($_POST["action"] == 'delete') {
         $id = $_POST["id"];
-        $object->query = "SELECT * FROM course WHERE id = '$id'";
-        $result = $object->get_result();
-        foreach ($result as $row) {
-            $resultset[] = $row;
-        }
+
+        $object->query = "
+		DELETE FROM course 
+		WHERE id = '" . $id . "'
+		";
+        $object->execute();
 
         echo '<div class="alert alert-success">Course Deleted</div>';
     }

@@ -4,7 +4,7 @@ include('../routine.php');
 $object = new routine();
 if (isset($_POST["action"])) {
     if ($_POST["action"] == 'fetch') {
-        $order_column = array('name', 'subject_code', 'course', 'semester', 'branch', 'teacher', 'description');
+        $order_column = array('name', 'subject_code', 'course', 'semester', 'branch', 'description');
         $output = array();
         $main_query = "SELECT * FROM subject";
         $search_query = '';
@@ -39,7 +39,6 @@ if (isset($_POST["action"])) {
             $sub_array[] = $object->get_course_name($row["course"]);
             $sub_array[] = $object->get_branch_name_from_code($row["branch"]);
             $sub_array[] = 'Semester ' . $row["semester"];
-            $sub_array[] = $row["teacher"];
             $sub_array[] = $row["description"];
             $sub_array[] = '
             <div align="center">
@@ -77,13 +76,12 @@ if (isset($_POST["action"])) {
                 ':course_code'                  =>    $object->clean_input($_POST['course']),
                 ':branch_code'                  =>    $object->clean_input($_POST['branch']),
                 ':semester'                  =>    $object->clean_input($_POST['semester']),
-                ':teacher'                    =>    $object->clean_input($_POST['teacher']),
                 ':description'                           =>    $object->clean_input($_POST['description']),
                 ':status'                           =>    'no',
             );
             $object->query = "
-			INSERT INTO subject (name ,subject_code,course, semester, branch,teacher,description,status)
-			VALUES (:subject,:subject_code,:course_code, :semester, :branch_code,:teacher,:description,:status)
+			INSERT INTO subject (name ,subject_code,course, semester, branch,description,status)
+			VALUES (:subject,:subject_code,:course_code, :semester, :branch_code,:description,:status)
 			";
             $object->execute($data);
             $success = '<div class="alert alert-success">Subjects Added</div>';
@@ -101,5 +99,66 @@ if (isset($_POST["action"])) {
             $resultset[] = $row;
         }
         echo '<div class="alert alert-success">Product Deleted</div>';
+    }
+
+    if ($_POST["action"] == 'edit') {
+        // var_dump("hello");
+        $error = '';
+        $success = '';
+        $tcode = $object->clean_input($_POST["form_hidden_id"]);
+        $data = array(
+            ':hidden_code'        =>    $tcode,
+            ':id'        =>    $_POST['id'],
+        );
+        $object->query = "SELECT * FROM subject WHERE subject_code = :hidden_code AND id != :id";
+        $object->execute($data);
+
+        if ($object->row_count() > 0) {
+            $error = '<div class="alert alert-danger">Duplicate subject code!!!</div>';
+        } else {
+            $data = array(
+                ':hidden_code'              =>    $tcode,
+                ':name'              =>    $object->e($_POST["subject"]),
+                ':course'             =>    $object->clean_input($_POST["course"]),
+                ':semester'             =>    $object->clean_input($_POST["semester"]),
+                ':branch'            =>    $object->clean_input($_POST["branch"]),
+                ':description'             =>    $object->clean_input($_POST["description"]),
+            );
+            $object->query = "
+			UPDATE subject 
+			SET name = :name, 
+			course = :course, 
+			semester = :semester,   
+			branch = :branch,   
+			description = :description   
+			WHERE subject_code = :hidden_code
+			";
+            $object->execute($data);
+            $success = '<div class="alert alert-success">Subject Updated</div>';
+        }
+        $output = array(
+            'error'        =>    $error,
+            'success'    =>    $success
+        );
+        echo json_encode($output);
+    }
+
+    if ($_POST["action"] == 'fetch_single') {
+        $object->query = "
+		SELECT * FROM subject 
+		WHERE id = '" . $_POST["id"] . "'
+		";
+        $result = $object->get_result();
+        $data = array();
+        foreach ($result as $row) {
+            $data['name'] = $row['name'];
+            $data['subject_code'] = $row['subject_code'];
+            $data['course'] = $row['course'];
+            $data['semester'] = $row['semester'];
+            $data['branch'] = $row['branch'];
+            $data['description'] = $row['description'];
+            $data['id'] = $row['id'];
+        }
+        echo json_encode($data);
     }
 }

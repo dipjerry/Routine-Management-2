@@ -138,15 +138,16 @@ if (isset($_POST["action"])) {
     if ($_POST["action"] == 'display_on_load') {
         // $generatedTable = $object->cleanTable();
         // session_start();
-        $course = $_SESSION["course"];
-        $branch = $_SESSION["branch"];
-        $semester = $_SESSION["semester"];
-
-        $html = '';
-        $days = array("monday", "tuesday", "wednesday", "thursday", "friday", "saturday");
-        foreach ($days as $day) {
-            $html .= $object->get_table_weekends_list($course, $branch, $semester,  $day);
+        if ($_SESSION["course"]  and $_SESSION["branch"] and $_SESSION["semester"]) {
+            $course = $_SESSION["course"];
+            $branch = $_SESSION["branch"];
+            $semester = $_SESSION["semester"];
+            $html = '';
+            $days = array("monday", "tuesday", "wednesday", "thursday", "friday", "saturday");
+            foreach ($days as $day) {
+                $html .= $object->get_table_weekends_list($course, $branch, $semester,  $day);
+            }
+            echo $html;
         }
-        echo $html;
     }
 }

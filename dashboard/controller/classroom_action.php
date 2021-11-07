@@ -84,12 +84,64 @@ if (isset($_POST["action"])) {
     }
     if ($_POST["action"] == 'delete') {
         $id = $_POST["id"];
-        $object->query = "SELECT * FROM classroom WHERE id = '$id'";
-        $result = $object->get_result();
-        foreach ($result as $row) {
-            $resultset[] = $row;
-        }
 
-        echo '<div class="alert alert-success">Product Deleted</div>';
+        $object->query = "
+		DELETE FROM classroom 
+		WHERE id = '" . $id . "'
+		";
+        $object->execute();
+
+        echo '<div class="alert alert-success">classroom Deleted</div>';
+    }
+    if ($_POST["action"] == 'edit') {
+        $error = '';
+        $success = '';
+        $tcode = $object->clean_input($_POST["form_hidden_id"]);
+        $data = array(
+            ':id'        =>    $_POST['id'],
+            ':classroom_code'                  =>    $object->clean_input($_POST['classroom']),
+
+        );
+        $object->query = "SELECT * FROM classroom WHERE classroom_code = :classroom_code AND  id != :id";
+
+        $object->execute($data);
+
+        if ($object->row_count() > 0) {
+            $error = '<div class="alert alert-danger">Duplicate classroom!!!</div>';
+        } else {
+            $data = array(
+                ':id'                  =>     $_POST['id'],
+                ':classroom_code'                  =>    $object->clean_input($_POST['classroom']),
+                ':description'                  =>    $object->clean_input($_POST['description']),
+            );
+            $object->query = "
+			UPDATE classroom
+			SET classroom_code = :classroom_code, 
+			description = :description   
+			WHERE id = :id
+			";
+            $object->execute($data);
+            $success = '<div class="alert alert-success">classroom Updated</div>';
+        }
+        $output = array(
+            'error'        =>    $error,
+            'success'    =>    $success
+        );
+        echo json_encode($output);
+    }
+
+    if ($_POST["action"] == 'fetch_single') {
+        $object->query = "
+		SELECT * FROM classroom 
+		WHERE id = '" . $_POST["id"] . "'
+		";
+        $result = $object->get_result();
+        $data = array();
+        foreach ($result as $row) {
+            $data['classroom'] = $row['classroom_code'];
+            $data['description'] = $row['description'];
+            $data['id'] = $row['id'];
+        }
+        echo json_encode($data);
     }
 }

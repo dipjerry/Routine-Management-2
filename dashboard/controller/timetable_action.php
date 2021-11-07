@@ -38,9 +38,8 @@ if (isset($_POST["action"])) {
             $sub_array[] = $row["status"];
             $sub_array[] = '
             <div align="center">
-            <button type="button" name="edit_button" class="btn btn-warning btn-circle btn-sm edit_button" data-id="' . $row["id"] . '"><i class="fa fa-edit"></i></button>
-            &nbsp;
-            <button type="button" name="delete_button" class="btn btn-danger btn-circle btn-sm delete_button" data-id="' . $row["id"] . '" ><i class="fa fa-remove"></i></button>
+           
+            <button type="button" name="delete_button" class="btn btn-danger btn-circle btn-sm delete_button" data-id="' . $row["id"] . '" data-teacher="' . $row["teacher"] . '" data-table_name="' . $row["table_name"] . '" data-day="' . $row["day"] . '" data-period="' . $row["period"] . '" ><i class="fa fa-remove"></i></button>
             </div>
             ';
             $data[] = $sub_array;
@@ -80,12 +79,13 @@ if (isset($_POST["action"])) {
             ':class_room'              =>    $class_room,
             ':period'              =>    $free_period,
             ':days'              =>    $object->clean_input($_POST['days']),
+            ':teacher'              =>    $object->clean_input($_POST['teacher']),
             ':status'              =>    'available',
         );
 
         $object->query = "
-        INSERT INTO routine_list (class_room, period, day,  status)
-        VALUES (:class_room , :period , :days , :status)
+        INSERT INTO routine_list (class_room, period, day,teacher,  status)
+        VALUES (:class_room , :period , :days ,:teacher, :status)
         ";
 
         $object->execute($data);
@@ -111,12 +111,38 @@ if (isset($_POST["action"])) {
     }
 
     if ($_POST["action"] == 'delete') {
+        $id = $_POST["id"];
+        $teacher = $_POST["teacher"];
+        $day = $_POST["day"];
+        $free_period = $_POST["period"];
+        $table_name = $_POST["table_name"];
+
         $object->query = "
-		DELETE FROM drink_quantity_table 
-		WHERE quantity_id = '" . $_POST["id"] . "'
+		DELETE FROM routine_list 
+		WHERE id = '" . $id . "'
 		";
         $object->execute();
-        echo '<div class="alert alert-success">Quantity Deleted</div>';
+        $data = array(
+            ':period'              =>    '',
+            ':days'              =>    $day,
+        );
+        $object->query = "
+        UPDATE " . $table_name . " SET  " . $free_period . " =  :period  
+        WHERE day= :days";
+
+        $object->execute($data);
+
+        $data = array(
+            ':period'              =>    '',
+            ':days'              =>    $day,
+        );
+        $object->query = "
+        UPDATE " . $teacher . " SET  " . $free_period . " =  :period  
+        WHERE day= :days";
+
+        $object->execute($data);
+
+        echo '<div class="alert alert-success">teacher Deleted</div>';
     }
 
     if ($_POST["action"] == 'cancel') {

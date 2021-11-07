@@ -18,7 +18,7 @@
 			<span id="message"></span>
 			<div class="row">
 				<div class="col-lg-12 clear-padding-xs">
-					<div class="col-sm-4">
+					<div class="col-sm-4 side">
 						<div class="dash-item first-dash-item">
 							<h6 class="item-title"><i class="fa fa-plus-circle"></i>ADD ANNOUNCEMENT</h6>
 							<div class="inner-item">
@@ -102,44 +102,44 @@
 
 
 		<!--Edit details modal-->
-		<div id="editDetailModal" class="modal fade" role="dialog">
+		<div id="editDetailModal" style="z-index:9999 !important;" class="modal">
 			<div class="modal-dialog">
 				<!-- Modal content-->
 				<div class="modal-content">
 					<div class="modal-header">
-						<button type="button" class="close" data-dismiss="modal">&times;</button>
 						<h4 class="modal-title"><i class="fa fa-edit"></i>EDIT CLASS DETAILS</h4>
+						<button type="button" class="close" data-dismiss="modal">&times;</button>
 					</div>
-					<div class="modal-body dash-form">
-						<div class="col-sm-4">
-							<label class="clear-top-margin"><i class="fa fa-book"></i>CLASS</label>
-							<input type="text" placeholder="CLASS" value="5 STD" />
+					<form id="accouncement_edit_form">
+						<div class="modal-body dash-form">
+							<div class="col-sm-12">
+								<label><i class="fa fa-code"></i>SUBJECT</label>
+								<input type="text" placeholder="Subject" name="subject" id="subject" />
+							</div>
+							<div class="col-sm-12">
+								<label><i class="fa fa-info-circle"></i>MESSAGE</label>
+								<textarea name="message" id="message_text"></textarea>
+							</div>
+							<div class="col-sm-12">
+								<label><i class="fa fa-link"></i>LINK</label>
+								<input type="text" placeholder="Enter Link Here" name="link" id="link">
+							</div>
+							<div class="clearfix"></div>
+							<div class="col-sm-12">
+								<label><i class="fa fa-link"></i>Image</label>
+								<input type="file" name="image">
+							</div>
+							<div class="clearfix"></div>
 						</div>
-						<div class="col-sm-4">
-							<label class="clear-top-margin"><i class="fa fa-code"></i>CLASS CODE</label>
-							<input type="text" placeholder="CLASS CODE" value="PTH05" />
+						<div class="modal-footer">
+							<div class="table-action-box">
+								<input type="hidden" name="id" id="id">
+								<input type="hidden" name="action" id="edit" value="edit">
+								<button type="submit" class="btn btn-success" id="teacher_edit_submit"><i class=" fa fa-check"></i> &nbsp;Okay &nbsp;</button>
+								<button type="button" class="btn btn-danger" data-dismiss="modal"><i class="fa fa-ban"></i>&nbsp;Cancel</button>
+							</div>
 						</div>
-						<div class="col-sm-4">
-							<label class="clear-top-margin"><i class="fa fa-user-secret"></i>CLASS TEACHER</label>
-							<select>
-								<option>-- Select --</option>
-								<option>Lennore Doe</option>
-								<option>John Doe</option>
-							</select>
-						</div>
-						<div class="clearfix"></div>
-						<div class="col-sm-12">
-							<label><i class="fa fa-info-circle"></i>DESCRIPTION</label>
-							<textarea placeholder="Enter Description Here"></textarea>
-						</div>
-						<div class="clearfix"></div>
-					</div>
-					<div class="modal-footer">
-						<div class="table-action-box">
-							<a href="#" class="save"><i class="fa fa-check"></i>SAVE</a>
-							<a href="#" class="cancel" data-dismiss="modal"><i class="fa fa-ban"></i>CLOSE</a>
-						</div>
-					</div>
+					</form>
 				</div>
 			</div>
 		</div>
@@ -197,6 +197,58 @@
 					}
 				})
 			}
+		});
+		$('#accouncement_edit_form').on('submit', function(event) {
+			event.preventDefault();
+			form = new FormData(this);
+			// for (var pair of form.entries()) {
+			// 	console.log(pair[0] + ', ' + pair[1]);
+			// }
+			if ($('#accouncement_edit_form').parsley().isValid()) {
+				$.ajax({
+					url: "./controller/announcement_action.php",
+					method: "POST",
+					data: new FormData(this),
+					dataType: 'json',
+					contentType: false,
+					processData: false,
+					success: function(data) {
+						$('#submit_button').attr('disabled', false);
+						// alert("data");
+						if (data.error != '') {
+							$('#form_message').html(data.error);
+						} else {
+							$('#editDetailModal').modal('hide');
+							$('#accouncement_edit_form').trigger("reset");
+							$('#message').html(data.success);
+							dataTable.ajax.reload();
+							setTimeout(function() {
+								$('#message').html('');
+							}, 5000);
+						}
+					}
+				})
+			}
+		});
+		$(document).on('click', '.edit_button', function() {
+			var id = $(this).data('id');
+			$.ajax({
+				url: "./controller/announcement_action.php",
+				method: "POST",
+				data: {
+					id: id,
+					action: 'fetch_single'
+				},
+				dataType: 'JSON',
+				success: function(data) {
+					$('#id').val(data.id);
+					$('#subject').val(data.subject);
+					$('#message_text').val(data.message);
+					$('#link').val(data.link);
+
+					$('#editDetailModal').modal('show');
+				}
+			})
 		});
 		$(document).on('click', '.delete_button', function() {
 			var id = $(this).data('id');

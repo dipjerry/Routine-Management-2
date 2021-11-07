@@ -58,6 +58,25 @@
 							<h6 class="item-title"><i class="fa fa-edit"></i>EDIT TIMETABLE</h6>
 							<div class="inner-item">
 								<!-- <table id="attendenceDetailedTable" class="display responsive nowrap" cellspacing="0" width="100%"> -->
+								<?php
+
+								if ($_SESSION["course"] != '' and $_SESSION["branch"] != '' and $_SESSION["semester"] != '') {
+									$course = $_SESSION["course"];
+									$branch = $_SESSION["branch"];
+									$semester = $_SESSION["semester"];
+									echo '<div class="text-center">';
+									echo '<h2>';
+									echo 'Time Table';
+									echo '<br>';
+									echo $course;
+									echo ' ';
+									echo $branch;
+									echo '<br>';
+									echo 'Semester' . $semester;
+									echo '</h2>';
+									echo '</div>';
+								}
+								?>
 								<table id="routineTable" class="display responsive nowrap table table-bordered" cellspacing="0" width="100%">
 									<thead>
 										<tr>
@@ -274,11 +293,11 @@
 			let state = '';
 			if (status == 'cancelled') {
 				action = 'active';
-				message = 'Active class'
+				message = 'Activate class'
 				state = 'Active'
 			} else {
 				action = "cancel";
-				message = 'Confirm cancel class again?'
+				message = 'Confirm cancel class?'
 				state = 'cancelled'
 			}
 			$.confirm({
