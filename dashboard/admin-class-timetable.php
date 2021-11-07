@@ -55,7 +55,7 @@
 					</div>
 					<div class="col-lg-12">
 						<div class="dash-item">
-							<h6 class="item-title"><i class="fa fa-edit"></i>EDIT TIMETABLE</h6>
+							<h6 class="item-title"><i class="fa fa-edit"></i>TIMETABLE PREVIEW</h6>
 							<div class="inner-item">
 								<!-- <table id="attendenceDetailedTable" class="display responsive nowrap" cellspacing="0" width="100%"> -->
 								<?php
@@ -95,10 +95,10 @@
 
 									</tbody>
 								</table>
-								<div class="table-action-box">
+								<!-- <div class="table-action-box">
 									<a href="#" class="save"><i class="fa fa-check"></i>SAVE</a>
 									<a href="#" class="cancel"><i class="fa fa-ban"></i>CANCEL</a>
-								</div>
+								</div> -->
 							</div>
 						</div>
 					</div>

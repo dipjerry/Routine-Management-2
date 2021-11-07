@@ -23,10 +23,7 @@ if (isset($_POST["user_email"])) {
     if ($total_row == 0) {
         $error = '<div class="alert alert-danger">Wrong Email Address</div>';
     } else {
-        //$result = $statement->fetchAll();
-
         $result = $object->statement_result();
-
         foreach ($result as $row) {
             if (md5($_POST["user_password"]) == $row["account_password"]) {
                 $_SESSION['user_id'] = $row['account_username'];

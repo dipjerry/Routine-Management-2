@@ -142,7 +142,7 @@ if (isset($_POST["action"])) {
     if ($_POST["action"] == 'display_on_load') {
         // $generatedTable = $object->cleanTable();
         // session_start();
-        if ($_SESSION["course"]  and $_SESSION["branch"] and $_SESSION["semester"]) {
+        if (isset($_SESSION["course"])  and isset($_SESSION["branch"]) and isset($_SESSION["semester"])) {
             $course = $_SESSION["course"];
             $branch = $_SESSION["branch"];
             $semester = $_SESSION["semester"];
