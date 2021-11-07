@@ -75,10 +75,12 @@ require("./class/loginFunction.php");
     <div id="loginModal" style="z-index:9999 !important;" class="modal modal-lg">
         <div class="modal-dialog">
             <div class="modal-content">
-                <div class="modal-header">
-                    <h4 class="modal-title bill_details" id="modal_title">Modal Header</h4>
+                <div class="modal-header bg-success">
+                    <h4 class="modal-title bill_details" id="modal_title">LOGIN</h4>
                     <button type="button" class="close" data-dismiss="modal">&times;</button>
                 </div>
+                <span id="message"></span>
+                <span id="form_message"></span>
                 <form method="post" id="login_form">
                     <div class="modal-body">
                         <!--Admin Login Form-->
@@ -93,7 +95,7 @@ require("./class/loginFunction.php");
                     </div>
                     <div class="modal-footer">
                         <div class="form-group">
-                            <button type="submit" name="login_button" id="login_button" class="btn btn-primary btn-user btn-block">Login</button>
+                            <button type="submit" name="login_button" id="login_button" class="btn btn-success btn-user btn-block">Login</button>
                         </div>
                     </div>
                 </form>
@@ -131,7 +133,6 @@ require("./class/loginFunction.php");
                     $('#login_button').attr('disabled', false);
                     if (data.error != '') {
                         $('#error').html(data.error);
-                        $('#login_button').val('Login');
                     } else {
                         window.location.href = "<?php echo $object->base_url; ?>/dashboard/admin-dashboard.php";
                     }
