@@ -382,7 +382,6 @@
 			var class_name = $('#class').val();
 			var teacher = $('#teacher').val();
 			var table_name = $('#table_name').val();
-			alert(id);
 			$.ajax({
 				url: "./controller/timetable_action.php",
 				method: "POST",

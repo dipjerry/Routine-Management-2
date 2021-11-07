@@ -200,10 +200,6 @@
 		});
 		$('#accouncement_edit_form').on('submit', function(event) {
 			event.preventDefault();
-			form = new FormData(this);
-			// for (var pair of form.entries()) {
-			// 	console.log(pair[0] + ', ' + pair[1]);
-			// }
 			if ($('#accouncement_edit_form').parsley().isValid()) {
 				$.ajax({
 					url: "./controller/announcement_action.php",

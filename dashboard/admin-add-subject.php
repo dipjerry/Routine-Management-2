@@ -230,11 +230,6 @@
 
 		$('#edit_subject_form').on('submit', function(event) {
 			event.preventDefault();
-			// form = new FormData(this);
-
-			// for (var pair of form.entries()) {
-			// 	console.log(pair[0] + ', ' + pair[1]);
-			// }
 			if ($('#edit_subject_form').parsley().isValid()) {
 				$.ajax({
 					url: "./controller/subject_action.php",

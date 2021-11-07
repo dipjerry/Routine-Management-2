@@ -195,11 +195,6 @@
 
         $('#edit_branch_form').on('submit', function(event) {
             event.preventDefault();
-            form = new FormData(this);
-
-            for (var pair of form.entries()) {
-                console.log(pair[0] + ', ' + pair[1]);
-            }
             if ($('#edit_branch_form').parsley().isValid()) {
                 $.ajax({
                     url: "./controller/branch_action.php",

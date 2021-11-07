@@ -16,7 +16,6 @@
                     <span>
                         <?php
                         if (isset($_SESSION['user_id'])) {
-
                             echo '<img src="./uploads/images/admin/' . $object->get_image_name($_SESSION['user_id']) . '" alt="user">';
                             echo $_SESSION['user_id'];
                         } else {
@@ -40,7 +39,8 @@
                     </li>
                     <li>
                         <div class="all-notifications">
-                            <a href="http://localhost/Routine%20Management/">LOGOUT</a>
+                            <!-- <a href="" id="logout">LOGOUT</a> -->
+                            <a href="./controller/logout.php" id="logout">LOGOUT</a>
                         </div>
                     </li>
                 </ul>
