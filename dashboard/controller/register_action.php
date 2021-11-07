@@ -87,7 +87,6 @@ if (isset($_POST["action"])) {
     }
 
     if ($_POST["action"] == 'Add') {
-        var_dump($_POST["account_username"][0]);
         $error = '';
 
         $success = '';

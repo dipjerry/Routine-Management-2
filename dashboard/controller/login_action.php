@@ -28,7 +28,7 @@ if (isset($_POST["user_email"])) {
         $result = $object->statement_result();
 
         foreach ($result as $row) {
-            if ($_POST["user_password"] == md5($row["account_password"])) {
+            if (md5($_POST["user_password"]) == $row["account_password"]) {
                 $_SESSION['user_id'] = $row['account_username'];
                 $_SESSION['user_name'] = $row['account_name'];
             } else {

@@ -51,6 +51,7 @@ if ($object->Is_set_up_done()) {
                     <form method="post" id="register_form" enctype="multipart/form-data">
                         <div class="p-5">
                             <span id="message"></span>
+                            <span id="form_message"></span>
                             <div class="text-center">
                                 <h1 class="h4 text-gray-900 mb-4">Register Admin</h1>
                             </div>
