@@ -140,7 +140,7 @@ if ($object->Is_set_up_done()) {
                         if (data.error != '') {
                             $('#message').html(data.error);
                         } else {
-                            // window.location.href = "<?php echo $object->base_url; ?>";
+                            window.location.href = "<?php echo $object->base_url; ?>";
                         }
                     }
                 })

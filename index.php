@@ -99,57 +99,7 @@ require("./class/loginFunction.php");
 </html>
 
 <script>
-    var modal = document.getElementById('myModal');
-    var teacherLoginBtn = document.getElementById("teacherLoginBtn");
-    var adminLoginBtn = document.getElementById("adminLoginBtn");
-    var heading = document.getElementById("popupHead");
-    var facultyForm = document.getElementById("facultyForm");
-    var adminForm = document.getElementById("adminForm");
-    var span = document.getElementsByClassName("close")[0];
-    adminLoginBtn.onclick = function() {
-        modal.style.display = "block";
-        heading.innerHTML = "Admin Login";
-        adminForm.style.display = "block";
-        facultyForm.style.display = "none";
-    }
-    teacherLoginBtn.onclick = function() {
-        modal.style.display = "block";
-        heading.innerHTML = "Faculty Login";
-        facultyForm.style.display = "block";
-        adminForm.style.display = "none";
-    }
-    span.onclick = function() {
-        modal.style.display = "none";
-        adminForm.style.display = "none";
-        facultyForm.style.display = "none";
-    }
-    window.onclick = function(event) {
-        if (event.target == modal) {
-            modal.style.display = "none";
-        }
-    }
-    var users = [{
-        username: 'admin',
-        password: 'abc123'
-    }, {
-        username: 'user1',
-        password: '321cba'
-    }];
-
-    var index = users.indexof(function(user) {
-        return users.username === user.username &&
-            users.password === user.password;
-    })
-
-    if (index !== -1) {
-        window.open('dashboard.html')
-    } else {
-        alert("Error Password or Username")
-    }
-</script>
-<script>
     $(document).ready(function() {
-
         $('#login_form').on('submit', function(event) {
             event.preventDefault();
             $.ajax({
@@ -164,7 +114,7 @@ require("./class/loginFunction.php");
                         $('#error').html(data.error);
                         $('#login_button').val('Login');
                     } else {
-                        window.location.href = "<?php echo $object->base_url; ?>/dashboard/dashboard.php";
+                        window.location.href = "<?php echo $object->base_url; ?>/dashboard/admin-dashboard.php";
                     }
                 }
             })
