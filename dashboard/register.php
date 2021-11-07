@@ -1,8 +1,6 @@
 <?php
 include('routine.php');
-
 $object = new routine();
-
 if ($object->Is_set_up_done()) {
     if ($object->is_login()) {
         header("location:" . $object->base_url . "dashboard.php");
@@ -10,9 +8,7 @@ if ($object->Is_set_up_done()) {
         header("location:" . $object->base_url . "index.php");
     }
 }
-
 ?>
-
 <!DOCTYPE html>
 <html lang="en">
 

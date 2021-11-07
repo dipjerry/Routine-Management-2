@@ -124,11 +124,11 @@ if (isset($_POST["action"])) {
     if ($_POST["action"] == 'display') {
         // $generatedTable = $object->cleanTable();
         // session_start();
-        if (isset($_SESSION["course"])  and isset($_SESSION["branch"]) and isset($_SESSION["semester"])) {
-            $_SESSION["course"] = $_POST['course'];
-            $_SESSION["branch"] = $_POST['branch'];
-            $_SESSION["semester"] = $_POST['semester'];
+        $_SESSION["course"] = $_POST['course'];
+        $_SESSION["branch"] = $_POST['branch'];
+        $_SESSION["semester"] = $_POST['semester'];
 
+        if (isset($_SESSION["course"])  and isset($_SESSION["branch"]) and isset($_SESSION["semester"])) {
             $html = '';
             $days = array("monday", "tuesday", "wednesday", "thursday", "friday", "saturday");
             foreach ($days as $day) {

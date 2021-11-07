@@ -95,10 +95,7 @@
 
 									</tbody>
 								</table>
-								<!-- <div class="table-action-box">
-									<a href="#" class="save"><i class="fa fa-check"></i>SAVE</a>
-									<a href="#" class="cancel"><i class="fa fa-ban"></i>CANCEL</a>
-								</div> -->
+
 							</div>
 						</div>
 					</div>

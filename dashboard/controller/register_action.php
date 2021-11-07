@@ -15,7 +15,6 @@ if (isset($_POST["action"])) {
         $main_query = "
 		SELECT * FROM teacher_list 
 		WHERE ' 
-		
 		";
 
         $search_query = '';
