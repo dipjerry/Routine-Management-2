@@ -67,6 +67,54 @@ class routine
     function onLeave()
     {
     }
+    function totalsubject()
+    {
+        $this->query = "
+		SELECT * FROM subject 
+		";
+        $this->execute();
+        return $this->row_count();
+    }
+    function totalteacher()
+    {
+        $this->query = "
+		SELECT * FROM teacher_list 
+		";
+        $this->execute();
+        return $this->row_count();
+    }
+    function totalcourse()
+    {
+        $this->query = "
+		SELECT * FROM course 
+		";
+        $this->execute();
+        return $this->row_count();
+    }
+    function totalbranch()
+    {
+        $this->query = "
+		SELECT * FROM branch 
+		";
+        $this->execute();
+        return $this->row_count();
+    }
+    function totalclassroom()
+    {
+        $this->query = "
+		SELECT * FROM classroom 
+		";
+        $this->execute();
+        return $this->row_count();
+    }
+    function totalmessage()
+    {
+        $this->query = "
+		SELECT * FROM message 
+		";
+        $this->execute();
+        return $this->row_count();
+    }
     function get_course()
     {
         $this->query = "
@@ -188,6 +236,16 @@ class routine
         $result = $this->get_result();
         foreach ($result as $row) {
             return $row['course_name'];
+        }
+    }
+    function get_image_name($id)
+    {
+        $this->query = "
+		SELECT userimage FROM useraccounts where account_username = '" . $id . "' LIMIT 1
+		";
+        $result = $this->get_result();
+        foreach ($result as $row) {
+            return $row['userimage'];
         }
     }
     function get_branch_name_from_code($id)
@@ -485,6 +543,8 @@ class routine
             return $resultset;
         }
     }
+
+
     // function is_canceled($classroom, $day, $period)
     // {
     //     $this->query = "select *  from message where classroom = '" . $classroom . "' AND day = '" . $day . "' AND period = '" . $period . "' LIMIT 1";

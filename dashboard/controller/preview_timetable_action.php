@@ -124,16 +124,20 @@ if (isset($_POST["action"])) {
     if ($_POST["action"] == 'display') {
         // $generatedTable = $object->cleanTable();
         // session_start();
-        $_SESSION["course"] = $_POST['course'];
-        $_SESSION["branch"] = $_POST['branch'];
-        $_SESSION["semester"] = $_POST['semester'];
+        if (isset($_SESSION["course"])  and isset($_SESSION["branch"]) and isset($_SESSION["semester"])) {
+            $_SESSION["course"] = $_POST['course'];
+            $_SESSION["branch"] = $_POST['branch'];
+            $_SESSION["semester"] = $_POST['semester'];
 
-        $html = '';
-        $days = array("monday", "tuesday", "wednesday", "thursday", "friday", "saturday");
-        foreach ($days as $day) {
-            $html .= $object->get_table_weekends_list($_POST['course'], $_POST['branch'], $_POST['semester'],  $day);
+            $html = '';
+            $days = array("monday", "tuesday", "wednesday", "thursday", "friday", "saturday");
+            foreach ($days as $day) {
+                $html .= $object->get_table_weekends_list($_POST['course'], $_POST['branch'], $_POST['semester'],  $day);
+            }
+            echo $html;
+        } else {
+            echo "select course details";
         }
-        echo $html;
     }
     if ($_POST["action"] == 'display_on_load') {
         // $generatedTable = $object->cleanTable();

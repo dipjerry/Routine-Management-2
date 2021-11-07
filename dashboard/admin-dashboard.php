@@ -18,8 +18,8 @@
 							<div class="stat-item">
 								<div class="stats">
 									<div class="col-xs-8 count">
-										<h1>199</h1>
-										<p>STUDENTS</p>
+										<h1><?php echo $object->totalcourse() ?></h1>
+										<p>COURSE</p>
 									</div>
 									<div class="col-xs-4 icon">
 										<i class="fa fa-users ex-icon"></i>
@@ -36,7 +36,8 @@
 							<div class="stat-item">
 								<div class="stats">
 									<div class="col-xs-8 count">
-										<h1>111</h1>
+										<h1><?php echo $object->totalteacher() ?></h1>
+
 										<p>TEACHERS</p>
 									</div>
 									<div class="col-xs-4 icon">
@@ -55,8 +56,8 @@
 							<div class="stat-item">
 								<div class="stats">
 									<div class="col-xs-8 count">
-										<h1>900</h1>
-										<p>EVENTS</p>
+										<h1><?php echo $object->totalsubject() ?></h1>
+										<p>SUBJECT</p>
 									</div>
 									<div class="col-xs-4 icon">
 										<i class="fa fa-flag look-icon"></i>
@@ -73,7 +74,7 @@
 							<div class="stat-item">
 								<div class="stats">
 									<div class="col-xs-8 count">
-										<h1>799</h1>
+										<h1><?php echo $object->totalmessage() ?></h1>
 										<p>MESSAGES</p>
 									</div>
 									<div class="col-xs-4 icon">

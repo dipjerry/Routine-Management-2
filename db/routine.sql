@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Nov 06, 2021 at 06:19 AM
+-- Generation Time: Nov 07, 2021 at 10:18 AM
 -- Server version: 10.4.21-MariaDB
 -- PHP Version: 7.3.30
 
@@ -48,6 +48,22 @@ CREATE TABLE `branch` (
   `branch` varchar(30) NOT NULL,
   `branch_code` varchar(30) NOT NULL,
   `description` varchar(300) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `bt6500cse12342`
+--
+
+CREATE TABLE `bt6500cse12342` (
+  `day` varchar(10) NOT NULL,
+  `period1` varchar(30) DEFAULT NULL,
+  `period2` varchar(30) DEFAULT NULL,
+  `period3` varchar(30) DEFAULT NULL,
+  `period4` varchar(30) DEFAULT NULL,
+  `period5` varchar(30) DEFAULT NULL,
+  `period6` varchar(30) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 -- --------------------------------------------------------
@@ -98,6 +114,38 @@ CREATE TABLE `course` (
 -- --------------------------------------------------------
 
 --
+-- Table structure for table `dp1234`
+--
+
+CREATE TABLE `dp1234` (
+  `day` varchar(10) NOT NULL,
+  `period1` varchar(30) DEFAULT NULL,
+  `period2` varchar(30) DEFAULT NULL,
+  `period3` varchar(30) DEFAULT NULL,
+  `period4` varchar(30) DEFAULT NULL,
+  `period5` varchar(30) DEFAULT NULL,
+  `period6` varchar(30) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `dp6500eec1213`
+--
+
+CREATE TABLE `dp6500eec1213` (
+  `day` varchar(10) NOT NULL,
+  `period1` varchar(30) DEFAULT NULL,
+  `period2` varchar(30) DEFAULT NULL,
+  `period3` varchar(30) DEFAULT NULL,
+  `period4` varchar(30) DEFAULT NULL,
+  `period5` varchar(30) DEFAULT NULL,
+  `period6` varchar(30) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+-- --------------------------------------------------------
+
+--
 -- Table structure for table `message`
 --
 
@@ -121,6 +169,8 @@ CREATE TABLE `routine_list` (
   `class_room` varchar(30) NOT NULL,
   `period` enum('period1','period2','period3','period4','period5','period6') NOT NULL,
   `day` enum('monday','tuesday','wednesday','thursday','friday','saturday') NOT NULL,
+  `teacher` varchar(30) NOT NULL,
+  `table_name` varchar(30) NOT NULL,
   `status` enum('available','cancelled') NOT NULL,
   `updated_on` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),
   `added_on` timestamp NULL DEFAULT current_timestamp()
@@ -197,6 +247,12 @@ ALTER TABLE `branch`
   ADD PRIMARY KEY (`id`);
 
 --
+-- Indexes for table `bt6500cse12342`
+--
+ALTER TABLE `bt6500cse12342`
+  ADD PRIMARY KEY (`day`);
+
+--
 -- Indexes for table `classroom`
 --
 ALTER TABLE `classroom`
@@ -213,6 +269,18 @@ ALTER TABLE `classroom_allotment`
 --
 ALTER TABLE `course`
   ADD PRIMARY KEY (`id`);
+
+--
+-- Indexes for table `dp1234`
+--
+ALTER TABLE `dp1234`
+  ADD PRIMARY KEY (`day`);
+
+--
+-- Indexes for table `dp6500eec1213`
+--
+ALTER TABLE `dp6500eec1213`
+  ADD PRIMARY KEY (`day`);
 
 --
 -- Indexes for table `message`

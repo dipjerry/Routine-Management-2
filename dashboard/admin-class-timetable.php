@@ -60,7 +60,7 @@
 								<!-- <table id="attendenceDetailedTable" class="display responsive nowrap" cellspacing="0" width="100%"> -->
 								<?php
 
-								if ($_SESSION["course"] != '' and $_SESSION["branch"] != '' and $_SESSION["semester"] != '') {
+								if (isset($_SESSION["course"])  and isset($_SESSION["branch"]) and isset($_SESSION["semester"])) {
 									$course = $_SESSION["course"];
 									$branch = $_SESSION["branch"];
 									$semester = $_SESSION["semester"];
