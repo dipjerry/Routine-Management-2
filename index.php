@@ -69,51 +69,24 @@ require("./class/loginFunction.php");
             <div class="modal-body" id="LoginType">
                 <!--Admin Login Form-->
                 <div style="display:none" id="adminForm">
-                    <form method="POST">
+                    <form method="post" id="login_form">
                         <div class="form-group">
-                            <label for="adminname">Username</label>
-                            <input type="text" class="form-control" id="adminname" name="UN" value="Admin" placeholder="Username ...">
+                            <input type="text" name="user_email" id="user_email" class="form-control" required data-parsley-type="email" data-parsley-trigger="keyup" placeholder="Enter Email Address..." />
                         </div>
                         <div class="form-group">
-                            <label for="password">Password</label>
-                            <input type="password" class="form-control" id="password" name="PASS" value="123" placeholder="Password ...">
+                            <input type="password" name="user_password" id="user_password" class="form-control" required data-parsley-trigger="keyup" placeholder="Password" />
                         </div>
-                        <div align="right">
-                            <button type="submit" class="w3-btn w3-blue" name="admin_login" id="btn-submit" value="SUBMIT">Log IN</button>
-                            <!-- <input type="submit" class="btn btn-default" name="faculty_login" value="faculty_login"> -->
+                        <div class="form-group">
+                            <button type="submit" name="login_button" id="login_button" class="btn btn-primary btn-user btn-block">Login</button>
                         </div>
                     </form>
                 </div>
             </div>
             <!--Faculty Login Form-->
-            <div style="display:none" id="facultyForm">
-                <form name="faculty" action="" id="faculty" method="post" style="overflow: hidden">
-                    <div class="form-group">
-                        <label for="facultyno">Faculty No.</label>
-                        <input type="text" class="form-control" id="facultyno" name="FN" placeholder="Faculty No. ...">
-                    </div>
-                    <div align="right">
-                        <button type="submit" class="btn btn-default" name="faculty_login">LOGIN</button>
-                    </div>
-                </form>
-            </div>
+
         </div>
     </div>
-    <!-- <div class="modal" style="z-index:9999 !important;" id="draftModal">
-        <div class="modal-dialog">
-            <div class="modal-content text-center">
 
-                <br><br>
-                <div class="modal-body">
-                    <h3 class="modal-title">Alert!</h3><br><br>
-                    Cart is already empty
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-primary" data-dismiss="modal">Okay</button>
-                </div>
-            </div>
-        </div>
-    </div> -->
     <div class="container">
         <div class="row set-row-pad">
             <div class="col-lg-4 col-md-4 col-sm-4   col-lg-offset-1 col-md-offset-1 col-sm-offset-1 " data-scroll-reveal="enter from the bottom after 0.4s">
@@ -173,4 +146,30 @@ require("./class/loginFunction.php");
     } else {
         alert("Error Password or Username")
     }
+</script>
+<script>
+    $(document).ready(function() {
+
+        $('#login_form').on('submit', function(event) {
+            event.preventDefault();
+            $.ajax({
+                url: "./dashboard/controller/login_action.php",
+                method: "POST",
+                data: $(this).serialize(),
+                dataType: 'json',
+
+                success: function(data) {
+                    $('#login_button').attr('disabled', false);
+                    if (data.error != '') {
+                        $('#error').html(data.error);
+                        $('#login_button').val('Login');
+                    } else {
+                        window.location.href = "<?php echo $object->base_url; ?>/dashboard/dashboard.php";
+                    }
+                }
+            })
+
+        });
+
+    });
 </script>

@@ -12,8 +12,8 @@ if (isset($_POST["user_email"])) {
     );
 
     $object->query = "
-		SELECT * FROM user_table 
-		WHERE user_email = :user_email
+		SELECT * FROM useraccounts 
+		WHERE account_username = :user_id
 	";
 
     $object->execute($data);
@@ -28,16 +28,11 @@ if (isset($_POST["user_email"])) {
         $result = $object->statement_result();
 
         foreach ($result as $row) {
-            // if ($row["user_status"] == 'Enable') {
-            if ($_POST["user_password"] == $row["user_password"]) {
-                $_SESSION['user_id'] = $row['user_id'];
-                $_SESSION['user_type'] = $row['user_type'];
+            if ($_POST["user_password"] == $row["account_password"]) {
+                $_SESSION['user_id'] = $row['account_name'];
             } else {
                 $error = '<div class="alert alert-danger">Wrong Password</div>';
             }
-            // } else {
-            //     $error = '<div class="alert alert-danger">Sorry, Your account has been disable, contact Admin</div>';
-            // }
         }
     }
 
