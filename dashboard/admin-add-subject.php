@@ -20,6 +20,7 @@
 					<div class="col-sm-4 side">
 						<div class="dash-item first-dash-item">
 							<h6 class="item-title"><i class="fa fa-plus-circle"></i>ADD SUBJECT</h6>
+
 							<div class="inner-item">
 								<div class="dash-form">
 									<form action="post" id="subjectForm">
@@ -121,6 +122,7 @@
 				<!-- Modal content-->
 				<div class="modal-content">
 					<div class="modal-header">
+
 						<h4 class="modal-title"><i class="fa fa-edit"></i>EDIT SUBJECT DETAILS</h4>
 						<button type="button" class="close" data-dismiss="modal">&times;</button>
 					</div>

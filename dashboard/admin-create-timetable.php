@@ -11,6 +11,7 @@
 			<div class="row">
 				<div class="col-lg-12 clear-padding-xs">
 					<h5 class="page-title"><i class="fa fa-clock-o"></i>CREATE TIMETABLE</h5>
+
 					<div class="section-divider"></div>
 				</div>
 			</div>

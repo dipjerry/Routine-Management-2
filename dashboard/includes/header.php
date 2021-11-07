@@ -33,5 +33,9 @@
     include('routine.php');
 
     $object = new routine();
-
+    if ($object->Is_set_up_done()) {
+        if (!$object->is_login()) {
+            header("location:" . $object->base_url);
+        }
+    }
     ?>

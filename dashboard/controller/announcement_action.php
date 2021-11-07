@@ -115,7 +115,7 @@ if (isset($_POST["action"])) {
 			SET subject = :subject, 
 			message = :message, 
 			link = :link,    
-			display_image = :display_image
+			image = :display_image
 			WHERE id = :hidden_code
 			";
             $object->execute($data);

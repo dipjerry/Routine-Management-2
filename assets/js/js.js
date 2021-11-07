@@ -15,14 +15,4 @@ jQuery(document).ready(function($) {
         jQuery("#outer-wrapper").toggleClass("toggled");
     });
 
-    //datepicker
-    jQuery("#startDate").datepicker();
-    jQuery("#endDate").datepicker();
-    jQuery("#studentDOB").datepicker({ changeYear: true });
-
-    //Student attendence detailed table
-    // jQuery('#attendenceDetailedTable').DataTable();
-
-
-    //Student attendence horizontal bar chart
 });

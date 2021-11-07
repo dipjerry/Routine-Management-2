@@ -3,7 +3,7 @@ include('routine.php');
 $object = new routine();
 if ($object->Is_set_up_done()) {
     if ($object->is_login()) {
-        header("location:" . $object->base_url . "dashboard.php");
+        header("location:" . $object->base_url . "dashboard/admin-dashboard.php");
     } else {
         header("location:" . $object->base_url . "index.php");
     }

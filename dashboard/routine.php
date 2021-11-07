@@ -295,6 +295,17 @@ class routine
             return $value['name'];
         }
     }
+    function get_teacher_alias($id)
+    {
+        $this->query = "
+        SELECT alias FROM teacher_list where teacher_code = '" . $id . "'    
+        LIMIT 1
+        ";
+        $result = $this->get_result();
+        foreach ($result as $value) {
+            return $value['alias'];
+        }
+    }
     function get_teacher_bycode($id)
     {
         $this->query = "

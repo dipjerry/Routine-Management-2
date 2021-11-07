@@ -55,9 +55,10 @@ if (isset($_POST["action"])) {
     if ($_POST["action"] == 'Add') {
         $success = '';
         $error = '';
+        $subject = $object->get_subject_bycode($_POST['subject']);
+        $teacher = $object->get_teacher_alias($_POST['teacher']);
         $generatedTable = $object->cleanTable($_POST['course'] . $_POST['branch'] . $_POST['semester']);
-        // $period = $object->clean_input($object->get_subject_bycode($_POST['subject'])) . "<br>" . $object->clean_input($_POST['teacher']);
-        $period = $object->clean_input($_POST['subject']) . "<br>" . $object->clean_input($_POST['teacher']);
+        $period = $object->clean_input($subject) . "<br>" . $object->clean_input($teacher);
         $free_period = $object->clean_input($_POST['free_slot']);
 
         $data = array(
